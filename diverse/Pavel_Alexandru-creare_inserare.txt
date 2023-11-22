@@ -1,0 +1,457 @@
+-- TARA
+create table tara (
+ cod_tara VARCHAR2(2) not null,
+ den_tara VARCHAR2(200) not null,
+ constraint pk_tara primary key (cod_tara)
+);
+
+-- PORT
+create table port (
+ port_id  INTEGER  not null,      
+ den_oras VARCHAR2(200) not null,
+ adresa VARCHAR2(500) not null,
+ cod_postal VARCHAR2(50) not null,
+ constraint pk_port primary key (port_id),
+ constraint u_den_oras unique (den_oras),
+ constraint u_cod_postal unique (cod_postal)
+);
+
+-- NAVA
+create table nava (
+ nava_id  INTEGER  not null,      
+ den_nava VARCHAR2(200) not null,
+ numar_imo VARCHAR2(10) not null,
+ lungime NUMBER(10,2) not null,
+ pescaj_maxim NUMBER(10,2) not null,
+ dwt NUMBER(10,2) not null,
+ cod_tara VARCHAR2(2) not null,
+ constraint pk_nava primary key (nava_id),
+ constraint fk_cod_tara foreign key (cod_tara) references tara (cod_tara),
+ constraint u_numar_imo unique (numar_imo),
+ constraint cn_lungime CHECK(lungime > 0),
+ constraint cn_pescaj_maxim CHECK(pescaj_maxim > 0),
+ constraint cn_dwt CHECK(dwt > 0)
+);
+
+-- LOCATIE
+create table locatie (
+ locatie_id  INTEGER  not null,
+ port_id  INTEGER  not null,
+ den_locatie VARCHAR2(200) not null,
+ adancime NUMBER(10,2) not null,
+ lungime NUMBER(10,2),
+ operativa NUMBER(1,0) not null, 
+ constraint pk_locatie primary key (locatie_id),
+ constraint fk_loc_port foreign key (port_id) references port (port_id),
+ constraint u_den_locatie unique (den_locatie,port_id),
+ constraint cl_adancime CHECK(adancime > 0),
+ constraint cl_lungime CHECK(lungime > 0),
+ constraint cl_operativa check (operativa in (0, 1))
+);
+
+-- ESCALA
+create table escala (
+ escala_id INTEGER  not null,
+ nava_id INTEGER  not null,
+ port_id INTEGER  not null,
+ stare_escala NUMBER(1,0) not null,
+ constraint pk_escala primary key (escala_id),
+ constraint fk_esc_nava foreign key (nava_id) references nava (nava_id),
+ constraint fk_esc_port foreign key (port_id) references port (port_id),
+ constraint ce_stare check (stare_escala in (0, 1, 2))
+);
+
+-- MANEVRA
+create table manevra (
+ manevra_id INTEGER  not null,
+ escala_id INTEGER  not null,
+ locatie_plecare_id INTEGER  not null,
+ locatie_sosire_id INTEGER  not null,
+ data_ora_start DATE not null,
+ data_ora_final DATE not null,
+ tip_manevra NUMBER(1,0) not null,
+ constraint pk_manevra primary key (manevra_id),
+ constraint fk_man_escala foreign key (escala_id) references escala (escala_id),
+ constraint fk_mansp_locatie foreign key (locatie_plecare_id) references locatie (locatie_id),
+ constraint fk_mans_locatie foreign key (locatie_sosire_id) references locatie (locatie_id),
+ constraint cm_tip_manevra check (tip_manevra in (0, 1, 2))
+);
+
+-- MARFA
+create table marfa (
+ marfa_id INTEGER not null,
+ den_marfa VARCHAR2(200) not null,
+ constraint pk_marfa primary key (marfa_id),
+ constraint u_den_marfa unique (den_marfa)
+);
+
+-- FIRMA
+create table firma (
+ firma_id INTEGER  not null,
+ den_firma VARCHAR2(200) not null,
+ tip_firma NUMBER(1,0) not null,
+ constraint pk_firma primary key (firma_id),
+ constraint u_den_firma unique (den_firma),
+ constraint cf_tip_firma check (tip_firma in (0, 1, 2))
+);
+
+-- DOCUMENT
+create table document(
+ document_id INTEGER  not null,
+ escala_id INTEGER  not null,
+ firma_id INTEGER  not null,
+ data_document DATE not null,
+ constraint pk_document primary key (document_id),
+ constraint fk_doc_escala foreign key (escala_id) references escala (escala_id),
+ constraint fk_doc_firma foreign key (firma_id) references firma (firma_id)
+);
+
+-- AVIZARE_MARITIMA
+create table avizare_maritima(
+ document_id INTEGER  not null,
+ data_ora_estimare_sosire DATE not null,
+ constraint pk_avizare_maritima primary key (document_id),
+ constraint fk_am_document foreign key (document_id) references document (document_id)
+);
+
+-- CERERE_FURNIZARE_COMBUSTIBIL
+create table cerere_furnizare_combustibil(
+ document_id INTEGER  not null,
+ cantitate_tone NUMBER(10,2) not null,
+ constraint pk_cerere_f_c primary key (document_id),
+ constraint fk_cfc_document foreign key (document_id) references document (document_id),
+ constraint cfc_cantitate_tone CHECK(cantitate_tone > 0)
+);
+
+-- MARFA_DECLARATA
+create table marfa_declarata(
+ document_id INTEGER  not null,
+ marfa_id INTEGER  not null,
+ cantitate_tone NUMBER(10,2) not null,
+ constraint pk_marfa_decl primary key (document_id,marfa_id),
+ constraint fk_mdecl_document foreign key (document_id) references document (document_id),
+ constraint fk_mdecl_marfa foreign key (marfa_id) references marfa (marfa_id),
+ constraint cmd_cantitate_tone CHECK(cantitate_tone > 0)
+);
+
+-- AVIZARE_DOCUMENT
+create table avizare_document(
+ document_id INTEGER  not null,
+ firma_id INTEGER  not null,
+ data_ora_avizarii DATE not null,
+ rezolutie VARCHAR2(50) not null,
+ constraint pk_rez_document primary key (document_id,firma_id),
+ constraint fk_rez_document foreign key (document_id) references document (document_id),
+ constraint fk_rez_firma foreign key (firma_id) references firma (firma_id),
+ constraint cad_rezolutie check (rezolutie in (0, 1))
+);
+
+-- OPERARE_MARFA
+create table operare_marfa(
+ escala_id INTEGER  not null,
+ locatie_id INTEGER  not null,
+ marfa_id INTEGER  not null,
+ firma_id INTEGER  not null,
+ tip_operatie NUMBER(1,0) not null,
+ cantitate_tone NUMBER(10,2) not null,
+ constraint pk_op_marfa primary key (escala_id,locatie_id,marfa_id,firma_id),
+ constraint fk_opmarf_escala foreign key (escala_id) references escala (escala_id),
+ constraint fk_opmarf_locatie foreign key (locatie_id) references locatie (locatie_id),
+ constraint fk_opmarf_marfa foreign key (marfa_id) references marfa (marfa_id),
+ constraint fk_opmarf_firma foreign key (firma_id) references firma (firma_id),
+ constraint com_tip_operatie check (tip_operatie in (0, 1)),
+ constraint com_cantitate_tone CHECK(cantitate_tone > 0)
+);
+
+-- SEQUENCE
+CREATE SEQUENCE pdb_seq start with 1;
+
+
+
+-- TARA
+INSERT INTO TARA(cod_tara,den_tara) VALUES('RO', 'ROMANIA');
+INSERT INTO TARA(cod_tara,den_tara) VALUES('TR', 'TURCIA');
+INSERT INTO TARA(cod_tara,den_tara) VALUES('MT', 'MALTA');
+INSERT INTO TARA(cod_tara,den_tara) VALUES('LR', 'LIBERIA');
+INSERT INTO TARA(cod_tara,den_tara) VALUES('PA', 'PANAMA');
+INSERT INTO TARA(cod_tara,den_tara) VALUES('GI', 'GIBRALTAR');
+
+-- PORT
+INSERT INTO PORT(port_id, den_oras, adresa, cod_postal) VALUES(pdb_seq.nextval,'CONSTANTA','Incinta port Constanta','900900');
+INSERT INTO PORT(port_id, den_oras, adresa, cod_postal) VALUES(pdb_seq.nextval,'MANGALIA','Incinta port Mangalia','905500');
+
+-- NAVA 
+-- valori inspirate din https://www.portofconstantza.com/pn/ro/nava
+INSERT INTO NAVA(nava_id, den_nava, numar_imo, lungime, pescaj_maxim, dwt, cod_tara)
+VALUES(pdb_seq.nextval,'AALBORG','IMO8122830',182.3,11.53,37425,'GI');
+
+INSERT INTO NAVA(nava_id, den_nava, numar_imo, lungime, pescaj_maxim, dwt, cod_tara)
+VALUES(pdb_seq.nextval,'AAL GENOA','IMO9393553',159.89,10,25733,'LR');
+
+INSERT INTO NAVA(nava_id, den_nava, numar_imo, lungime, pescaj_maxim, dwt, cod_tara)
+VALUES(pdb_seq.nextval,'26 AGUSTOS','IMO9238478',189.99,12,52455,'TR');
+
+INSERT INTO NAVA(nava_id, den_nava, numar_imo, lungime, pescaj_maxim, dwt, cod_tara)
+VALUES(pdb_seq.nextval,'3 MAJ','IMO8122730',224.65,13.32,64850,'MT');
+
+INSERT INTO NAVA(nava_id, den_nava, numar_imo, lungime, pescaj_maxim, dwt, cod_tara)
+VALUES(pdb_seq.nextval,'A LADYBUG','IMO9441867',232.38,10,26985,'PA');
+
+INSERT INTO NAVA(nava_id, den_nava, numar_imo, lungime, pescaj_maxim, dwt, cod_tara)
+VALUES(pdb_seq.nextval,'ABANOZ','IMO9121857',99.95,6.61,6500,'PA');
+
+-- LOCATIE 
+-- valori inspirate din https://umex.ro/dane-operatiuni/
+INSERT INTO LOCATIE(locatie_id,port_id,den_locatie,adancime,lungime,operativa)
+VALUES(pdb_seq.nextval,(SELECT port_id from port where den_oras = 'CONSTANTA'),'38',12.5,205,1);
+
+INSERT INTO LOCATIE(locatie_id,port_id,den_locatie,adancime,lungime,operativa)
+VALUES(pdb_seq.nextval,(SELECT port_id from port where den_oras = 'CONSTANTA'),'39',13.5,205,1);
+
+INSERT INTO LOCATIE(locatie_id,port_id,den_locatie,adancime,lungime,operativa)
+VALUES(pdb_seq.nextval,(SELECT port_id from port where den_oras = 'CONSTANTA'),'40',13.5,205,1);
+
+INSERT INTO LOCATIE(locatie_id,port_id,den_locatie,adancime,lungime,operativa)
+VALUES(pdb_seq.nextval,(SELECT port_id from port where den_oras = 'CONSTANTA'),'RORO3',12.5,185,1);
+
+INSERT INTO LOCATIE(locatie_id,port_id,den_locatie,adancime,lungime,operativa)
+VALUES(pdb_seq.nextval,(SELECT port_id from port where den_oras = 'CONSTANTA'),'RADA-CT',100,null,0);
+
+INSERT INTO LOCATIE(locatie_id,port_id,den_locatie,adancime,lungime,operativa)
+VALUES(pdb_seq.nextval,(SELECT port_id from port where den_oras = 'MANGALIA'),'RADA-MG',100,null,0);
+
+INSERT INTO LOCATIE(locatie_id,port_id,den_locatie,adancime,lungime,operativa)
+VALUES(pdb_seq.nextval,(SELECT port_id from port where den_oras = 'MANGALIA'),'01',12,null,1);
+
+INSERT INTO LOCATIE(locatie_id,port_id,den_locatie,adancime,lungime,operativa)
+VALUES(pdb_seq.nextval,(SELECT port_id from port where den_oras = 'MANGALIA'),'02',11,null,1);
+
+-- ESCALA
+-- escala 17 planificata in CT pt AALBORG
+INSERT INTO ESCALA(escala_id, nava_id, port_id, stare_escala)
+VALUES(pdb_seq.nextval,(SELECT nava_id from nava where den_nava = 'AALBORG'),(SELECT port_id from port where den_oras = 'CONSTANTA'),0);
+
+-- escala 18 realizata in CT pt AAL GENOA care mai este in port
+INSERT INTO ESCALA(escala_id, nava_id, port_id, stare_escala)
+VALUES(pdb_seq.nextval,(SELECT nava_id from nava where den_nava = 'AAL GENOA'),(SELECT port_id from port where den_oras = 'CONSTANTA'),1);
+
+-- escala 19 realizata in CT pt 26 AGUSTOS care mai este in port
+INSERT INTO ESCALA(escala_id, nava_id, port_id, stare_escala)
+VALUES(pdb_seq.nextval,(SELECT nava_id from nava where den_nava = '26 AGUSTOS'),(SELECT port_id from port where den_oras = 'CONSTANTA'),1);
+
+-- escala 20 realizata in CT pentru 3 MAJ care a plecat din port
+INSERT INTO ESCALA(escala_id, nava_id, port_id, stare_escala)
+VALUES(pdb_seq.nextval,(SELECT nava_id from nava where den_nava = '3 MAJ'),(SELECT port_id from port where den_oras = 'CONSTANTA'),1);
+
+-- escala 21 anulata in Mangalia pentru A LADYBUG
+INSERT INTO ESCALA(escala_id, nava_id, port_id, stare_escala)
+VALUES(pdb_seq.nextval,(SELECT nava_id from nava where den_nava = 'A LADYBUG'),(SELECT port_id from port where den_oras = 'MANGALIA'),2);
+
+-- escala 22 planificata in Mangalia pt ABANOZ
+INSERT INTO ESCALA(escala_id, nava_id, port_id, stare_escala)
+VALUES(pdb_seq.nextval,(SELECT nava_id from nava where den_nava = 'ABANOZ'),(SELECT port_id from port where den_oras = 'MANGALIA'),0);
+
+-- MANEVRA
+-- intrare pentru escala 18 RADA-CT -> 38
+INSERT INTO MANEVRA(manevra_id, escala_id, locatie_plecare_id, locatie_sosire_id, data_ora_start, data_ora_final, tip_manevra)
+VALUES(pdb_seq.nextval,18,(select locatie_id from locatie where den_locatie = 'RADA-CT' and port_id = 1),(select locatie_id from locatie where den_locatie = '38' and port_id = 1),TO_DATE('12/05/2022 14:08', 'DD/MM/YYYY HH24:MI'),TO_DATE('12/05/2022 14:38', 'DD/MM/YYYY HH24:MI'),0);
+
+-- mutare pentru escala 18 38 -> 40 
+INSERT INTO MANEVRA(manevra_id, escala_id, locatie_plecare_id, locatie_sosire_id, data_ora_start, data_ora_final, tip_manevra)
+VALUES(pdb_seq.nextval,18,(select locatie_id from locatie where den_locatie = '38' and port_id = 1),(select locatie_id from locatie where den_locatie = '40' and port_id = 1),TO_DATE('13/05/2022 10:15', 'DD/MM/YYYY HH24:MI'),TO_DATE('13/05/2022 10:40', 'DD/MM/YYYY HH24:MI'),1);
+
+-- intrare pentru escala 19 RADA-CT -> 39
+INSERT INTO MANEVRA(manevra_id, escala_id, locatie_plecare_id, locatie_sosire_id, data_ora_start, data_ora_final, tip_manevra)
+VALUES(pdb_seq.nextval,19,(select locatie_id from locatie where den_locatie = 'RADA-CT' and port_id = 1),(select locatie_id from locatie where den_locatie = '39' and port_id = 1),TO_DATE('10/05/2022 08:15', 'DD/MM/YYYY HH24:MI'),TO_DATE('10/05/2022 08:30', 'DD/MM/YYYY HH24:MI'),0);
+
+-- mutare pentru escala 19 39 -> RORO3 
+INSERT INTO MANEVRA(manevra_id, escala_id, locatie_plecare_id, locatie_sosire_id, data_ora_start, data_ora_final, tip_manevra)
+VALUES(pdb_seq.nextval,19,(select locatie_id from locatie where den_locatie = '39' and port_id = 1),(select locatie_id from locatie where den_locatie = 'RORO3' and port_id = 1),TO_DATE('11/05/2022 10:15', 'DD/MM/YYYY HH24:MI'),TO_DATE('11/05/2022 10:40', 'DD/MM/YYYY HH24:MI'),1);
+
+-- intrare pentru escala 20 RADA-CT -> 40
+INSERT INTO MANEVRA(manevra_id, escala_id, locatie_plecare_id, locatie_sosire_id, data_ora_start, data_ora_final, tip_manevra)
+VALUES(pdb_seq.nextval,20,(select locatie_id from locatie where den_locatie = 'RADA-CT' and port_id = 1),(select locatie_id from locatie where den_locatie = '40' and port_id = 1),TO_DATE('01/05/2022 18:15', 'DD/MM/YYYY HH24:MI'),TO_DATE('01/05/2022 18:15', 'DD/MM/YYYY HH24:MI'),0);
+
+-- mutare pentru escala 20 40 -> RORO3 
+INSERT INTO MANEVRA(manevra_id, escala_id, locatie_plecare_id, locatie_sosire_id, data_ora_start, data_ora_final, tip_manevra)
+VALUES(pdb_seq.nextval,20,(select locatie_id from locatie where den_locatie = '40' and port_id = 1),(select locatie_id from locatie where den_locatie = 'RORO3' and port_id = 1),TO_DATE('02/05/2022 10:15', 'DD/MM/YYYY HH24:MI'),TO_DATE('02/05/2022 10:40', 'DD/MM/YYYY HH24:MI'),1);
+
+-- iesire pentru escala 20 RORO3 -> RADA-CT
+INSERT INTO MANEVRA(manevra_id, escala_id, locatie_plecare_id, locatie_sosire_id, data_ora_start, data_ora_final, tip_manevra)
+VALUES(pdb_seq.nextval,20,(select locatie_id from locatie where den_locatie = 'RORO3' and port_id = 1),(select locatie_id from locatie where den_locatie = 'RADA-CT' and port_id = 1),TO_DATE('03/05/2022 11:15', 'DD/MM/YYYY HH24:MI'),TO_DATE('03/05/2022 12:00', 'DD/MM/YYYY HH24:MI'),2);
+
+-- MARFA
+INSERT INTO MARFA(marfa_id, den_marfa) VALUES(pdb_seq.nextval,'Porumb');
+INSERT INTO MARFA(marfa_id, den_marfa) VALUES(pdb_seq.nextval,'Grau');
+INSERT INTO MARFA(marfa_id, den_marfa) VALUES(pdb_seq.nextval,'Carbune');
+INSERT INTO MARFA(marfa_id, den_marfa) VALUES(pdb_seq.nextval,'Fier vechi');
+INSERT INTO MARFA(marfa_id, den_marfa) VALUES(pdb_seq.nextval,'Azotat');
+INSERT INTO MARFA(marfa_id, den_marfa) VALUES(pdb_seq.nextval,'Banane');
+
+-- FIRMA
+-- valori inspirate din https://www.portofconstantza.com/pn/ro/servicii/2
+-- autoritate
+INSERT INTO FIRMA(firma_id,den_firma,tip_firma) VALUES(pdb_seq.nextval,'Compania Nationala Administratia Porturilor Maritime',2);
+-- autoritate
+INSERT INTO FIRMA(firma_id,den_firma,tip_firma) VALUES(pdb_seq.nextval,'Autoritatea Navala Romana',2);
+-- agent nava
+INSERT INTO FIRMA(firma_id,den_firma,tip_firma) VALUES(pdb_seq.nextval,'ADEMAR TRANSPORT LINE SRL',0);
+-- agent nava
+INSERT INTO FIRMA(firma_id,den_firma,tip_firma) VALUES(pdb_seq.nextval,'AGREX SHIPPING AND TRADING S.R.L.',0);
+-- operator portuar
+INSERT INTO FIRMA(firma_id,den_firma,tip_firma) VALUES(pdb_seq.nextval,'UMEX',1);
+-- operator portuar
+INSERT INTO FIRMA(firma_id,den_firma,tip_firma) VALUES(pdb_seq.nextval,'DECIROM',1);
+
+-- DOC AVIZARE_MARITIMA
+-- avizare pentru escala 17 Azotat
+INSERT INTO DOCUMENT(document_id, escala_id, firma_id, data_document) 
+VALUES(pdb_seq.nextval,17,38,TO_DATE('29/04/2022 00:00', 'DD/MM/YYYY HH24:MI'));
+INSERT INTO AVIZARE_MARITIMA(document_id, data_ora_estimare_sosire)
+VALUES(42,TO_DATE('03/05/2022 11:15', 'DD/MM/YYYY HH24:MI'));
+-- marfa declarata in avizare pentru escala 17
+INSERT INTO MARFA_DECLARATA(document_id, marfa_id, cantitate_tone) VALUES(42,(select marfa_id from marfa where den_marfa ='Azotat'),1000);
+
+-- avizare pentru escala 18 porumb si grau
+INSERT INTO DOCUMENT(document_id, escala_id, firma_id, data_document) 
+VALUES(pdb_seq.nextval,18,38,TO_DATE('10/05/2022 00:00', 'DD/MM/YYYY HH24:MI'));
+INSERT INTO AVIZARE_MARITIMA(document_id, data_ora_estimare_sosire)
+VALUES(43,TO_DATE('12/05/2022 10:08', 'DD/MM/YYYY HH24:MI'));
+-- marfa declarata in avizare pentru escala 18
+INSERT INTO MARFA_DECLARATA(document_id, marfa_id, cantitate_tone) VALUES(43,(select marfa_id from marfa where den_marfa ='Porumb'),800);
+INSERT INTO MARFA_DECLARATA(document_id, marfa_id, cantitate_tone) VALUES(43,(select marfa_id from marfa where den_marfa ='Grau'),700);
+
+-- avizare pentru escala 19
+INSERT INTO DOCUMENT(document_id, escala_id, firma_id, data_document) 
+VALUES(pdb_seq.nextval,19,38,TO_DATE('08/05/2022 00:00', 'DD/MM/YYYY HH24:MI'));
+INSERT INTO AVIZARE_MARITIMA(document_id, data_ora_estimare_sosire)
+VALUES(44,TO_DATE('10/05/2022 07:15', 'DD/MM/YYYY HH24:MI'));
+-- marfa declarata in avizare pentru escala 19
+INSERT INTO MARFA_DECLARATA(document_id, marfa_id, cantitate_tone) VALUES(44,(select marfa_id from marfa where den_marfa ='Grau'),400);
+INSERT INTO MARFA_DECLARATA(document_id, marfa_id, cantitate_tone) VALUES(44,(select marfa_id from marfa where den_marfa ='Banane'),350);
+
+-- avizare pentru escala 20
+INSERT INTO DOCUMENT(document_id, escala_id, firma_id, data_document) 
+VALUES(pdb_seq.nextval,20,38,TO_DATE('29/04/2022 00:00', 'DD/MM/YYYY HH24:MI'));
+INSERT INTO AVIZARE_MARITIMA(document_id, data_ora_estimare_sosire)
+VALUES(45,TO_DATE('01/05/2022 20:15', 'DD/MM/YYYY HH24:MI'));
+-- marfa declarata in avizare pentru escala 20
+INSERT INTO MARFA_DECLARATA(document_id, marfa_id, cantitate_tone) VALUES(45,(select marfa_id from marfa where den_marfa ='Porumb'),200);
+INSERT INTO MARFA_DECLARATA(document_id, marfa_id, cantitate_tone) VALUES(45,(select marfa_id from marfa where den_marfa ='Grau'),300);
+INSERT INTO MARFA_DECLARATA(document_id, marfa_id, cantitate_tone) VALUES(45,(select marfa_id from marfa where den_marfa ='Banane'),500);
+
+-- avizare pentru escala 21
+INSERT INTO DOCUMENT(document_id, escala_id, firma_id, data_document) 
+VALUES(pdb_seq.nextval,21,39,TO_DATE('29/04/2022 00:00', 'DD/MM/YYYY HH24:MI'));
+INSERT INTO AVIZARE_MARITIMA(document_id, data_ora_estimare_sosire)
+VALUES(46,TO_DATE('20/05/2022 11:15', 'DD/MM/YYYY HH24:MI'));
+-- marfa declarata in avizare pentru escala 21
+INSERT INTO MARFA_DECLARATA(document_id, marfa_id, cantitate_tone) VALUES(46,(select marfa_id from marfa where den_marfa ='Porumb'),300);
+INSERT INTO MARFA_DECLARATA(document_id, marfa_id, cantitate_tone) VALUES(46,(select marfa_id from marfa where den_marfa ='Banane'),100);
+
+-- avizare pentru escala 22
+INSERT INTO DOCUMENT(document_id, escala_id, firma_id, data_document) 
+VALUES(pdb_seq.nextval,22,39,TO_DATE('29/04/2022 00:00', 'DD/MM/YYYY HH24:MI'));
+INSERT INTO AVIZARE_MARITIMA(document_id, data_ora_estimare_sosire)
+VALUES(47,TO_DATE('20/06/2022 11:15', 'DD/MM/YYYY HH24:MI'));
+-- marfa declarata in avizare pentru escala 22
+INSERT INTO MARFA_DECLARATA(document_id, marfa_id, cantitate_tone) VALUES(47,(select marfa_id from marfa where den_marfa ='Fier vechi'),400);
+
+-- DOC CERERE_FURNIZARE_COMBUSTIBIL
+-- cerere pentru escala 18
+INSERT INTO DOCUMENT(document_id, escala_id, firma_id, data_document) 
+VALUES(pdb_seq.nextval,18,38,TO_DATE('11/05/2022 00:00', 'DD/MM/YYYY HH24:MI'));
+INSERT INTO CERERE_FURNIZARE_COMBUSTIBIL(document_id, cantitate_tone) VALUES(48,500);
+
+-- cerere pentru escala 19
+INSERT INTO DOCUMENT(document_id, escala_id, firma_id, data_document) 
+VALUES(pdb_seq.nextval,19,39,TO_DATE('11/05/2022 00:00', 'DD/MM/YYYY HH24:MI'));
+INSERT INTO CERERE_FURNIZARE_COMBUSTIBIL(document_id, cantitate_tone) VALUES(49,100);
+
+-- cerere pentru escala 20
+INSERT INTO DOCUMENT(document_id, escala_id, firma_id, data_document) 
+VALUES(pdb_seq.nextval,20,38,TO_DATE('11/05/2022 00:00', 'DD/MM/YYYY HH24:MI'));
+INSERT INTO CERERE_FURNIZARE_COMBUSTIBIL(document_id, cantitate_tone) VALUES(50,580);
+
+-- AVIZARE_DOCUMENT
+-- avizare pentru escala 17
+insert INTO AVIZARE_DOCUMENT(document_id,firma_id,data_ora_avizarii,rezolutie) VALUES(42,36,TO_DATE('29/04/2022 12:15', 'DD/MM/YYYY HH24:MI'),1);
+insert INTO AVIZARE_DOCUMENT(document_id,firma_id,data_ora_avizarii,rezolutie) VALUES(42,37,TO_DATE('29/04/2022 11:30', 'DD/MM/YYYY HH24:MI'),1);
+-- avizare pentru escala 18
+insert INTO AVIZARE_DOCUMENT(document_id,firma_id,data_ora_avizarii,rezolutie) VALUES(43,36,TO_DATE('10/05/2022 10:15', 'DD/MM/YYYY HH24:MI'),1);
+insert INTO AVIZARE_DOCUMENT(document_id,firma_id,data_ora_avizarii,rezolutie) VALUES(43,37,TO_DATE('10/05/2022 10:29', 'DD/MM/YYYY HH24:MI'),1);
+-- avizare pentru escala 19
+insert INTO AVIZARE_DOCUMENT(document_id,firma_id,data_ora_avizarii,rezolutie) VALUES(44,36,TO_DATE('08/05/2022 07:40', 'DD/MM/YYYY HH24:MI'),1);
+insert INTO AVIZARE_DOCUMENT(document_id,firma_id,data_ora_avizarii,rezolutie) VALUES(44,37,TO_DATE('08/05/2022 08:15', 'DD/MM/YYYY HH24:MI'),1);
+-- avizare pentru escala 20
+insert INTO AVIZARE_DOCUMENT(document_id,firma_id,data_ora_avizarii,rezolutie) VALUES(45,36,TO_DATE('29/04/2022 22:15', 'DD/MM/YYYY HH24:MI'),1);
+insert INTO AVIZARE_DOCUMENT(document_id,firma_id,data_ora_avizarii,rezolutie) VALUES(45,37,TO_DATE('29/04/2022 21:15', 'DD/MM/YYYY HH24:MI'),1);
+-- avizare pentru escala 21
+insert INTO AVIZARE_DOCUMENT(document_id,firma_id,data_ora_avizarii,rezolutie) VALUES(46,36,TO_DATE('29/04/2022 12:15', 'DD/MM/YYYY HH24:MI'),0);
+insert INTO AVIZARE_DOCUMENT(document_id,firma_id,data_ora_avizarii,rezolutie) VALUES(46,37,TO_DATE('29/04/2022 14:15', 'DD/MM/YYYY HH24:MI'),0);
+-- avizare pentru escala 22
+insert INTO AVIZARE_DOCUMENT(document_id,firma_id,data_ora_avizarii,rezolutie) VALUES(47,36,TO_DATE('29/04/2022 12:15', 'DD/MM/YYYY HH24:MI'),1);
+insert INTO AVIZARE_DOCUMENT(document_id,firma_id,data_ora_avizarii,rezolutie) VALUES(47,37,TO_DATE('29/04/2022 13:15', 'DD/MM/YYYY HH24:MI'),1);
+
+--  OPERARE_MARFA
+-- escala 18 incarca porumb si grau loc 38 si 40
+INSERT INTO OPERARE_MARFA(escala_id, locatie_id, marfa_id, firma_id, tip_operatie, cantitate_tone)
+VALUES(18,(select locatie_id from locatie where den_locatie = '38' and port_id = 1),(select marfa_id from marfa where den_marfa ='Porumb'),40,0,300);
+INSERT INTO OPERARE_MARFA(escala_id, locatie_id, marfa_id, firma_id, tip_operatie, cantitate_tone)
+VALUES(18,(select locatie_id from locatie where den_locatie = '38' and port_id = 1),(select marfa_id from marfa where den_marfa ='Porumb'),41,0,200);
+INSERT INTO OPERARE_MARFA(escala_id, locatie_id, marfa_id, firma_id, tip_operatie, cantitate_tone)
+VALUES(18,(select locatie_id from locatie where den_locatie = '40' and port_id = 1),(select marfa_id from marfa where den_marfa ='Grau'),40,0,100);
+
+-- escala 19 incarca grau si banane loc 39 si RORO3
+INSERT INTO OPERARE_MARFA(escala_id, locatie_id, marfa_id, firma_id, tip_operatie, cantitate_tone)
+VALUES(19,(select locatie_id from locatie where den_locatie = '39' and port_id = 1),(select marfa_id from marfa where den_marfa ='Grau'),40,0,100);
+INSERT INTO OPERARE_MARFA(escala_id, locatie_id, marfa_id, firma_id, tip_operatie, cantitate_tone)
+VALUES(19,(select locatie_id from locatie where den_locatie = 'RORO3' and port_id = 1),(select marfa_id from marfa where den_marfa ='Grau'),41,0,200);
+INSERT INTO OPERARE_MARFA(escala_id, locatie_id, marfa_id, firma_id, tip_operatie, cantitate_tone)
+VALUES(19,(select locatie_id from locatie where den_locatie = 'RORO3' and port_id = 1),(select marfa_id from marfa where den_marfa ='Banane'),41,0,300);
+
+-- escala 20 descarca porumb, grau si banane loc 40 si RORO3
+INSERT INTO OPERARE_MARFA(escala_id, locatie_id, marfa_id, firma_id, tip_operatie, cantitate_tone)
+VALUES(20,(select locatie_id from locatie where den_locatie = '40' and port_id = 1),(select marfa_id from marfa where den_marfa ='Grau'),40,1,100);
+INSERT INTO OPERARE_MARFA(escala_id, locatie_id, marfa_id, firma_id, tip_operatie, cantitate_tone)
+VALUES(20,(select locatie_id from locatie where den_locatie = '40' and port_id = 1),(select marfa_id from marfa where den_marfa ='Porumb'),41,1,200);
+INSERT INTO OPERARE_MARFA(escala_id, locatie_id, marfa_id, firma_id, tip_operatie, cantitate_tone)
+VALUES(20,(select locatie_id from locatie where den_locatie = '40' and port_id = 1),(select marfa_id from marfa where den_marfa ='Banane'),40,1,300);
+INSERT INTO OPERARE_MARFA(escala_id, locatie_id, marfa_id, firma_id, tip_operatie, cantitate_tone)
+VALUES(20,(select locatie_id from locatie where den_locatie = 'RORO3' and port_id = 1),(select marfa_id from marfa where den_marfa ='Grau'),41,1,100);
+INSERT INTO OPERARE_MARFA(escala_id, locatie_id, marfa_id, firma_id, tip_operatie, cantitate_tone)
+VALUES(20,(select locatie_id from locatie where den_locatie = 'RORO3' and port_id = 1),(select marfa_id from marfa where den_marfa ='Porumb'),40,1,100);
+INSERT INTO OPERARE_MARFA(escala_id, locatie_id, marfa_id, firma_id, tip_operatie, cantitate_tone)
+VALUES(20,(select locatie_id from locatie where den_locatie = 'RORO3' and port_id = 1),(select marfa_id from marfa where den_marfa ='Banane'),41,1,200);
+
+-- DOC CERERE_FURNIZARE_COMBUSTIBIL
+-- cerere pentru escala 17
+INSERT INTO DOCUMENT(document_id, escala_id, firma_id, data_document) 
+VALUES(pdb_seq.nextval,17,38,TO_DATE('11/05/2022 00:00', 'DD/MM/YYYY HH24:MI'));
+INSERT INTO CERERE_FURNIZARE_COMBUSTIBIL(document_id, cantitate_tone) VALUES(?,500);
+
+-- cerere pentru escala 22
+INSERT INTO DOCUMENT(document_id, escala_id, firma_id, data_document) 
+VALUES(pdb_seq.nextval,22,38,TO_DATE('20/06/2022 00:00', 'DD/MM/YYYY HH24:MI'));
+INSERT INTO CERERE_FURNIZARE_COMBUSTIBIL(document_id, cantitate_tone) VALUES(52,500);
+
+-- PORT
+INSERT INTO PORT(port_id, den_oras, adresa, cod_postal) VALUES(pdb_seq.nextval,'AGIGEA','Incinta port Agigea','900800');
+INSERT INTO PORT(port_id, den_oras, adresa, cod_postal) VALUES(pdb_seq.nextval,'MEDIA','Incinta port Media','995500');
+INSERT INTO PORT(port_id, den_oras, adresa, cod_postal) VALUES(pdb_seq.nextval,'TOMIS','Incinta port Tomis','995800');
+
+-- DROP TABLE TARA CASCADE CONSTRAINTS;
+-- DROP TABLE PORT CASCADE CONSTRAINTS;
+-- DROP TABLE NAVA CASCADE CONSTRAINTS;
+-- DROP TABLE LOCATIE CASCADE CONSTRAINTS;
+-- DROP TABLE ESCALA CASCADE CONSTRAINTS;
+-- DROP TABLE MANEVRA CASCADE CONSTRAINTS;
+-- DROP TABLE MARFA CASCADE CONSTRAINTS;
+-- DROP TABLE FIRMA CASCADE CONSTRAINTS;
+-- DROP TABLE DOCUMENT CASCADE CONSTRAINTS;
+-- DROP TABLE AVIZARE_MARITIMA CASCADE CONSTRAINTS;
+-- DROP TABLE CERERE_FURNIZARE_COMBUSTIBIL CASCADE CONSTRAINTS;
+-- DROP TABLE MARFA_DECLARATA CASCADE CONSTRAINTS;
+-- DROP TABLE AVIZARE_DOCUMENT CASCADE CONSTRAINTS;
+-- DROP TABLE OPERARE_MARFA CASCADE CONSTRAINTS;
+-- DROP SEQUENCE pdb_seq;
