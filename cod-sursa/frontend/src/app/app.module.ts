@@ -1,20 +1,23 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { HTTP_INTERCEPTORS, HttpBackend, HttpClient, HttpClientModule } from "@angular/common/http";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from "@angular/common/http";
-import { TranslateHttpLoader } from "@ngx-translate/http-loader";
+import { HeaderComponent } from './header/header.component';
 import { LanguageInterceptor } from "./interceptors/language/language.interceptor";
 
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http);
+export function HttpLoaderFactory(httpHandler: HttpBackend) {
+  return new TranslateHttpLoader(new HttpClient(httpHandler));
 }
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -24,9 +27,11 @@ export function HttpLoaderFactory(http: HttpClient) {
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClient],
-      }
-    })
+        deps: [HttpBackend],
+      },
+      defaultLanguage: 'ro'
+    }),
+    NgbModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: LanguageInterceptor, multi: true}
