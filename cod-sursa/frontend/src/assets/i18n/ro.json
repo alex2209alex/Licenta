@@ -1,3 +1,12 @@
 {
-  "avizari-maritime": "Avizări maritime"
+  "meniu": {
+    "avizari-maritime": "Avizări maritime",
+    "buletine-pilotaj": "Buletine de pilotaj maritim"
+  },
+  "avm": {
+    "avm-lista": "Listă de avizări maritime"
+  },
+  "bp": {
+    "bp-lista": "Listă de buletine de pilotaj maritime"
+  }
 }
