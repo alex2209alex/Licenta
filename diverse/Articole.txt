@@ -1,0 +1,3 @@
+Jpa
+https://thorben-janssen.com/ultimate-guide-to-implementing-equals-and-hashcode-with-hibernate/
+https://thorben-janssen.com/best-practices-many-one-one-many-associations-mappings/

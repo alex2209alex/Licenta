@@ -5,3 +5,6 @@ spring:
     password: postgres
   liquibase:
     liquibase-schema: ge
+  jpa:
+    properties:
+      hibernate.default_schema: ge

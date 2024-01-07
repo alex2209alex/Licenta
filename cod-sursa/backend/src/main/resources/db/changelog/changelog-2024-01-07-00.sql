@@ -24,22 +24,23 @@ VALUES (5, 'PA', 'PANAMA');
 INSERT INTO ge.tara(id, cod_tara, den_tara)
 VALUES (6, 'GI', 'GIBRALTAR');
 
-
 -- PORT
 CREATE SEQUENCE ge.port_seq START 100;
 
 create table ge.port
 (
     id       bigint             not null,
+    fk_tara  bigint             not null,
     cod_port varchar(10) unique not null,
     den_port VARCHAR(200)       not null,
-    constraint pk_port primary key (id)
+    constraint pk_port primary key (id),
+    constraint fk_port_tara foreign key (fk_tara) references ge.tara (id)
 );
 
-INSERT INTO ge.port(id, cod_port, den_port)
-VALUES (1, 'ROCND', 'CONSTANTA');
-INSERT INTO ge.port(id, cod_port, den_port)
-VALUES (2, 'ROMAG', 'MANGALIA');
+INSERT INTO ge.port(id, fk_tara, cod_port, den_port)
+VALUES (1, 1, 'ROCND', 'CONSTANTA');
+INSERT INTO ge.port(id, fk_tara, cod_port, den_port)
+VALUES (2, 1,  'ROMAG', 'MANGALIA');
 
 -- NAVA
 CREATE SEQUENCE ge.nava_seq START 100;
@@ -139,6 +140,8 @@ INSERT INTO ge.marfa(id, den_marfa)
 VALUES (6, 'Banane');
 
 -- FIRMA
+CREATE SEQUENCE ge.firma_seq START 100;
+
 create table ge.firma
 (
     id        bigint              not null,
