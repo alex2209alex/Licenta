@@ -27,4 +27,5 @@ npm install keycloak-angular@14 keycloak-js
 
 Spring oauth2 resource-server config
 https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html
+https://www.baeldung.com/spring-cors
 https://stackoverflow.com/questions/76682586/allow-cors-with-spring-security-6-1-1-with-authenticated-requests
