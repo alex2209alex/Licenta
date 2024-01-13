@@ -1,29 +1,24 @@
-package ro.unibuc.fmi.ge.persistence;
+package ro.unibuc.fmi.ge.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "escala")
+@Table(name = "tara")
 @Getter
 @Setter
-public class MaritimeCall {
+public class Country {
     @Id
-    @SequenceGenerator(name = "escala_seq", sequenceName = "escala_seq")
-    @GeneratedValue(generator = "escala_seq")
+    @SequenceGenerator(name = "tara_seq", sequenceName = "tara_seq")
+    @GeneratedValue(generator = "tara_seq")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="fk_nava")
-    private Ship ship;
+    @Column(name = "cod_tara")
+    private String code;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="fk_port")
-    private Port port;
-
-    @Column(name = "stare_escala")
-    private Integer status;
+    @Column(name = "den_tara")
+    private String name;
 
     @Override
     public int hashCode() {
@@ -41,7 +36,7 @@ public class MaritimeCall {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        MaritimeCall other = (MaritimeCall) obj;
+        Country other = (Country) obj;
         return id != null && id.equals(other.getId());
     }
 }

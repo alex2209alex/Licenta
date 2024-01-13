@@ -1,3 +1,30 @@
 Jpa
 https://thorben-janssen.com/ultimate-guide-to-implementing-equals-and-hashcode-with-hibernate/
 https://thorben-janssen.com/best-practices-many-one-one-many-associations-mappings/
+
+Oauth2
+https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html
+https://www.baeldung.com/spring-security-oauth-resource-server
+laurentiu spirca oauth2 youtube
+https://www.keycloak.org/getting-started/getting-started-zip
+https://docs.spring.io/spring-security/reference/features/authentication/password-storage.html
+https://www.baeldung.com/keycloak-custom-user-attributes
+https://www.baeldung.com/tag/keycloak
+https://www.baeldung.com/keycloak-custom-user-attributes
+
+Server port
+https://www.baeldung.com/spring-boot-change-port
+
+Keyclock
+https://jwt.io/ pt decodare token
+kc.bat start-dev --db postgres --db-url jdbc:postgresql://localhost/postgres --db-username postgres --db-password postgres --db-schema keyclock
+http://localhost:8080/
+user si parola: admin admin
+
+Angular keycloak
+https://www.npmjs.com/package/keycloak-angular
+npm install keycloak-angular@14 keycloak-js
+
+Spring oauth2 resource-server config
+https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html
+https://stackoverflow.com/questions/76682586/allow-cors-with-spring-security-6-1-1-with-authenticated-requests

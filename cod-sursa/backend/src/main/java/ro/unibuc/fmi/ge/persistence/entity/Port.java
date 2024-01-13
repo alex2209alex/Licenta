@@ -1,24 +1,27 @@
-package ro.unibuc.fmi.ge.persistence;
+package ro.unibuc.fmi.ge.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "tara")
 @Getter
 @Setter
-public class Country {
+public class Port {
     @Id
-    @SequenceGenerator(name = "tara_seq", sequenceName = "tara_seq")
-    @GeneratedValue(generator = "tara_seq")
+    @SequenceGenerator(name = "port_seq", sequenceName = "port_seq")
+    @GeneratedValue(generator = "port_seq")
     private Long id;
 
-    @Column(name = "cod_tara")
+    @Column(name = "cod_port")
     private String code;
 
-    @Column(name = "den_tara")
+    @Column(name = "den_port")
     private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="fk_tara")
+    private Country country;
 
     @Override
     public int hashCode() {
@@ -36,7 +39,7 @@ public class Country {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Country other = (Country) obj;
+        Port other = (Port) obj;
         return id != null && id.equals(other.getId());
     }
 }

@@ -1,4 +1,4 @@
-package ro.unibuc.fmi.ge.persistence;
+package ro.unibuc.fmi.ge.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,17 +7,25 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "avizare_maritima")
+@Table(name = "buletin_pilotaj")
 @Getter
 @Setter
-public class MaritimeEndorsement {
+public class PilotageBulletin {
     @Id
-    @SequenceGenerator(name = "avizare_maritima_seq", sequenceName = "avizare_maritima_seq")
-    @GeneratedValue(generator = "avizare_maritima_seq")
+    @SequenceGenerator(name = "buletin_pilotaj_seq", sequenceName = "buletin_pilotaj_seq")
+    @GeneratedValue(generator = "buletin_pilotaj_seq")
     private Long id;
 
-    @Column(name = "data_ora_estimare_sosire")
-    private LocalDateTime estimatedArrivalTime;
+    @Column(name = "data_ora_estimare_start")
+    private LocalDateTime estimatedStartTime;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="fk_operator_marfa")
+    private Company cargoOperatingCompany;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="fk_pilotaj")
+    private Company pilotageCompany;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="fk_agent")
@@ -28,10 +36,10 @@ public class MaritimeEndorsement {
     private MaritimeCall maritimeCall;
 
     @Column(name = "data_creare")
-    private LocalDateTime creationTime;
+    private LocalDateTime creationDate;
 
     @Column(name = "stare_document")
-    private Integer documentStatus;
+    private Integer status;
 
     @Column(name = "motiv_respingere")
     private String rejectionReason;
@@ -52,7 +60,7 @@ public class MaritimeEndorsement {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        MaritimeEndorsement other = (MaritimeEndorsement) obj;
+        PilotageBulletin other = (PilotageBulletin) obj;
         return id != null && id.equals(other.getId());
     }
 }

@@ -1,19 +1,19 @@
-package ro.unibuc.fmi.ge.persistence;
+package ro.unibuc.fmi.ge.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "operare_marfa")
+@Table(name = "manevra")
 @Getter
 @Setter
-public class CargoOperation {
+public class ShipMovement {
     @Id
-    @SequenceGenerator(name = "operare_marfa_seq", sequenceName = "operare_marfa_seq")
-    @GeneratedValue(generator = "operare_marfa_seq")
+    @SequenceGenerator(name = "manevra_seq", sequenceName = "manevra_seq")
+    @GeneratedValue(generator = "manevra_seq")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -21,22 +21,24 @@ public class CargoOperation {
     private MaritimeCall maritimeCall;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="fk_locatie")
-    private Location location;
+    @JoinColumn(name="fk_locatie_plecare")
+    private Location startLocation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="fk_marfa")
-    private Cargo cargo;
+    @JoinColumn(name="fk_locatie_sosire")
+    private Location endLocation;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="fk_firma_operare")
-    private Company operator;
+    @Column(name = "data_ora_start")
+    private LocalDateTime beginingTime;
 
-    @Column(name="tip_operatie")
+    @Column(name = "data_ora_final")
+    private LocalDateTime finishTime;
+
+    @Column(name = "tip_manevra")
     private Integer type;
 
-    @Column(name="cantitate_tone")
-    private BigDecimal quantity;
+    @Column(name = "stare_manevra")
+    private Integer status;
 
 
     @Override
@@ -55,7 +57,7 @@ public class CargoOperation {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        CargoOperation other = (CargoOperation) obj;
+        ShipMovement other = (ShipMovement) obj;
         return id != null && id.equals(other.getId());
     }
 }

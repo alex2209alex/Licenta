@@ -1,24 +1,21 @@
-package ro.unibuc.fmi.ge.persistence;
+package ro.unibuc.fmi.ge.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "firma")
+@Table(name = "marfa")
 @Getter
 @Setter
-public class Company {
+public class Cargo {
     @Id
-    @SequenceGenerator(name = "firma_seq", sequenceName = "firma_seq")
-    @GeneratedValue(generator = "firma_seq")
+    @SequenceGenerator(name = "marfa_seq", sequenceName = "marfa_seq")
+    @GeneratedValue(generator = "marfa_seq")
     private Long id;
 
-    @Column(name = "den_firma")
+    @Column(name = "den_marfa")
     private String name;
-
-    @Column(name = "tip_firma")
-    private Integer type;
 
     @Override
     public int hashCode() {
@@ -36,7 +33,7 @@ public class Company {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Company other = (Company) obj;
+        Cargo other = (Cargo) obj;
         return id != null && id.equals(other.getId());
     }
 }

@@ -1,21 +1,33 @@
-package ro.unibuc.fmi.ge.persistence;
+package ro.unibuc.fmi.ge.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
-@Table(name = "marfa")
+@Table(name = "locatie")
 @Getter
 @Setter
-public class Cargo {
+public class Location {
     @Id
-    @SequenceGenerator(name = "marfa_seq", sequenceName = "marfa_seq")
-    @GeneratedValue(generator = "marfa_seq")
+    @SequenceGenerator(name = "locatie_seq", sequenceName = "locatie_seq")
+    @GeneratedValue(generator = "locatie_seq")
     private Long id;
 
-    @Column(name = "den_marfa")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="fk_port")
+    private Port port;
+
+    @Column(name = "den_locatie")
     private String name;
+
+    @Column(name = "adancime")
+    private BigDecimal depth;
+
+    @Column(name = "lungime")
+    private BigDecimal length;
 
     @Override
     public int hashCode() {
@@ -33,7 +45,7 @@ public class Cargo {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Cargo other = (Cargo) obj;
+        Location other = (Location) obj;
         return id != null && id.equals(other.getId());
     }
 }

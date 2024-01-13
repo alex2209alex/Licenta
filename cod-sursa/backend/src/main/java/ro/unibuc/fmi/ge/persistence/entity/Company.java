@@ -1,33 +1,24 @@
-package ro.unibuc.fmi.ge.persistence;
+package ro.unibuc.fmi.ge.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
 @Entity
-@Table(name = "locatie")
+@Table(name = "firma")
 @Getter
 @Setter
-public class Location {
+public class Company {
     @Id
-    @SequenceGenerator(name = "locatie_seq", sequenceName = "locatie_seq")
-    @GeneratedValue(generator = "locatie_seq")
+    @SequenceGenerator(name = "firma_seq", sequenceName = "firma_seq")
+    @GeneratedValue(generator = "firma_seq")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="fk_port")
-    private Port port;
-
-    @Column(name = "den_locatie")
+    @Column(name = "den_firma")
     private String name;
 
-    @Column(name = "adancime")
-    private BigDecimal depth;
-
-    @Column(name = "lungime")
-    private BigDecimal length;
+    @Column(name = "tip_firma")
+    private Integer type;
 
     @Override
     public int hashCode() {
@@ -45,7 +36,7 @@ public class Location {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Location other = (Location) obj;
+        Company other = (Company) obj;
         return id != null && id.equals(other.getId());
     }
 }
