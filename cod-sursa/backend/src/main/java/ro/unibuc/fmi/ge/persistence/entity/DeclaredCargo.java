@@ -18,7 +18,7 @@ public class DeclaredCargo {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="fk_am")
-    private MaritimeEndorsement maritimeEndorsement;
+    private MaritimeNotice maritimeNotice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="fk_marfa")

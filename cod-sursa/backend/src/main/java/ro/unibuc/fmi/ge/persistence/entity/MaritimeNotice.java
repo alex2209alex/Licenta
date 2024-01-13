@@ -3,6 +3,7 @@ package ro.unibuc.fmi.ge.persistence.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import ro.unibuc.fmi.ge.dto.MaritimeNoticeDocumentStatus;
 
 import java.time.LocalDateTime;
 
@@ -10,14 +11,14 @@ import java.time.LocalDateTime;
 @Table(name = "avizare_maritima")
 @Getter
 @Setter
-public class MaritimeEndorsement {
+public class MaritimeNotice {
     @Id
     @SequenceGenerator(name = "avizare_maritima_seq", sequenceName = "avizare_maritima_seq")
     @GeneratedValue(generator = "avizare_maritima_seq")
     private Long id;
 
     @Column(name = "data_ora_estimare_sosire")
-    private LocalDateTime estimatedArrivalTime;
+    private LocalDateTime estimatedArrivalDateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="fk_agent")
@@ -31,7 +32,7 @@ public class MaritimeEndorsement {
     private LocalDateTime creationTime;
 
     @Column(name = "stare_document")
-    private Integer documentStatus;
+    private MaritimeNoticeDocumentStatus documentStatus;
 
     @Column(name = "motiv_respingere")
     private String rejectionReason;
@@ -52,7 +53,7 @@ public class MaritimeEndorsement {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        MaritimeEndorsement other = (MaritimeEndorsement) obj;
+        MaritimeNotice other = (MaritimeNotice) obj;
         return id != null && id.equals(other.getId());
     }
 }
