@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { HTTP_INTERCEPTORS, HttpBackend, HttpClient, HttpClientModule } from "@angular/common/http";
@@ -9,9 +9,24 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { LanguageInterceptor } from "./interceptors/language/language.interceptor";
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
 export function HttpLoaderFactory(httpHandler: HttpBackend) {
   return new TranslateHttpLoader(new HttpClient(httpHandler));
+}
+
+export function initializeKeycloak(keycloak: KeycloakService) {
+  return () =>
+    keycloak.init({
+      config: {
+        url: 'http://localhost:8080',
+        realm: 'ge',
+        clientId: 'ge'
+      },
+      initOptions: {
+        onLoad: 'login-required'
+      }
+    });
 }
 
 @NgModule({
@@ -23,6 +38,7 @@ export function HttpLoaderFactory(httpHandler: HttpBackend) {
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    KeycloakAngularModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -34,7 +50,13 @@ export function HttpLoaderFactory(httpHandler: HttpBackend) {
     NgbModule
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: LanguageInterceptor, multi: true}
+    { provide: HTTP_INTERCEPTORS, useClass: LanguageInterceptor, multi: true },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService]
+    }
   ],
   bootstrap: [AppComponent]
 })
