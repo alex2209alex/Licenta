@@ -3,3 +3,36 @@
         <h3>{{'avm.avm-lista' | translate}}</h3>
     </div>
 </div>
+<div class="row">
+    <div class="col-12 text-end">
+        <button type="button" class="btn btn-primary" routerLink="new">{{'avm.adauga' | translate}}</button>
+    </div>
+</div>
+<div class="row mb-1">
+    <div class="col-3">
+        <b>{{'avm.nava' | translate}}</b>
+    </div>
+    <div class="col-3">
+        <b>{{'avm.agent-nava' | translate}}</b>
+    </div>
+    <div class="col-3">
+        <b>{{'avm.eta' | translate}}</b>
+    </div>
+    <div class="col-3">
+        <b>{{'avm.status' | translate}}</b>
+    </div>
+</div>
+<div class="row border-top mb-1" *ngFor="let item of items">
+    <div class="col-3">
+        {{item.shipName}}
+    </div>
+    <div class="col-3">
+        {{item.agentName}}
+    </div>
+    <div class="col-3">
+        {{item.estimatedArrivalTime}}
+    </div>
+    <div class="col-3">
+        {{('avm.status-' + item.documentStatus) | translate}}
+    </div>
+</div>

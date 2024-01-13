@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AvService } from '../shared/av.service';
+import { AvListItem } from '../shared/av-list-item.model';
 
 @Component({
   selector: 'ge-av-home',
@@ -7,15 +8,15 @@ import { AvService } from '../shared/av.service';
   styleUrls: ['./av-home.component.css']
 })
 export class AvHomeComponent implements OnInit {
+  items: AvListItem[] = [];
+
   constructor(private apiService: AvService) {
   }
 
   ngOnInit(): void {
-    this.apiService.search({
-      documentStatus: 0
-    }).subscribe(
+    this.apiService.search({documentStatus: 0}).subscribe(
       (resData) => {
-        console.log(resData);
+        this.items = resData;
       }
     );
   }

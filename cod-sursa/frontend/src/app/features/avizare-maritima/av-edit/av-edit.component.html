@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-12">
+        <h3>{{'avm.adauga' | translate}}</h3>
+    </div>
+</div>
+<div class="spinner-border" role="status" *ngIf="isLoading">
+    <span class="visually-hidden">Loading...</span>
+</div>
+<ng-container *ngIf="!isLoading">
+    <form [formGroup]="myForm">
+        <div class="row mb-1">
+            <div class="col-12 col-md-4 offset-md-4">
+                <label for="port" class="form-label">{{'avm.port' | translate}} *</label>
+                <ng-select id="port" [items]="ports" bindLabel="label" bindValue="id" formControlName="port">
+                </ng-select>
+                <small class="text-danger" *ngIf="controls.port.hasError('required') && controls.port.touched">
+                    {{'app.camp-obligatoriu' | translate}}
+                </small>
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-12 col-md-4 offset-md-4">
+                <label for="ship" class="form-label">{{'avm.nava' | translate}} *</label>
+                <ng-select id="ship" [items]="ships" bindLabel="label" bindValue="id" formControlName="ship">
+                </ng-select>
+                <small class="text-danger" *ngIf="controls.ship.hasError('required') && controls.ship.touched">
+                    {{'app.camp-obligatoriu' | translate}}
+                </small>
+            </div>
+        </div>
+    </form>
+</ng-container>

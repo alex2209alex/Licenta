@@ -3,8 +3,23 @@
     "avizari-maritime": "Avizări maritime",
     "buletine-pilotaj": "Buletine de pilotaj maritim"
   },
+  "app": {
+    "camp-obligatoriu": "Câmpul este obligatoriu"
+  },
   "avm": {
-    "avm-lista": "Listă de avizări maritime"
+    "avm-lista": "Listă de avizări maritime",
+    "adauga": "Adaugă avizare maritimă",
+    "nava": "Navă",
+    "agent-nava": "Agent navă",
+    "eta": "Dată estimativă de sosire",
+    "ora": "Ora estimativă de sosire",
+    "port": "Port",
+    "status": "Status",
+    "status-0": "Așteaptă aprobări",
+    "status-1": "Aprobat de ANR",
+    "status-2": "Aprobat de ANR și APMC",
+    "status-3": "Respins",
+    "status-4": "Aprobat"
   },
   "bp": {
     "bp-lista": "Listă de buletine de pilotaj maritime"

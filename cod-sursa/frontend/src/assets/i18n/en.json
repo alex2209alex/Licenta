@@ -3,8 +3,23 @@
     "avizari-maritime": "Maritime notices",
     "buletine-pilotaj": "Maritime pilotage bulletins"
   },
+  "app": {
+    "camp-obligatoriu": "The field is required"
+  },
   "avm": {
-    "avm-lista": "List of maritime notices"
+    "avm-lista": "List of maritime notices",
+    "adauga": "Add maritime notice",
+    "nava": "Ship",
+    "agent-nava": "Ship agent",
+    "eta": "Estimated arrival date",
+    "ora": "Estimated arrival time",
+    "port": "Port",
+    "status": "Status",
+    "status-0": "Awaiting approval",
+    "status-1": "Aproved by ANR",
+    "status-2": "Aproved by ANR and APMC",
+    "status-3": "Rejected",
+    "status-4": "Canceled"
   },
   "bp": {
     "bp-lista": "List of maritime pilotage bulletins"

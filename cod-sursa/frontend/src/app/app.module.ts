@@ -5,11 +5,11 @@ import { HTTP_INTERCEPTORS, HttpBackend, HttpClient, HttpClientModule } from "@a
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { LanguageInterceptor } from "./interceptors/language/language.interceptor";
-import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
 export function HttpLoaderFactory(httpHandler: HttpBackend) {
   return new TranslateHttpLoader(new HttpClient(httpHandler));
