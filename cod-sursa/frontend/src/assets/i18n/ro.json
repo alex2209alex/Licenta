@@ -4,9 +4,15 @@
     "buletine-pilotaj": "Buletine de pilotaj maritim"
   },
   "app": {
-    "camp-obligatoriu": "Câmpul este obligatoriu"
+    "camp-obligatoriu": "Câmpul este obligatoriu",
+    "titlu-informare": "Informare",
+    "mesaj-op-succes": "Operația a fost efectuată cu succes.",
+    "titlu-eroare": "Eroare",
+    "formular-invalid": "Formularul este invalid. Completați câmpurile conform indicaților"
   },
   "avm": {
+    "anuleaza": "Anulează",
+    "salveaza": "Salvează",
     "avm-lista": "Listă de avizări maritime",
     "adauga": "Adaugă avizare maritimă",
     "nava": "Navă",

@@ -4,9 +4,15 @@
     "buletine-pilotaj": "Maritime pilotage bulletins"
   },
   "app": {
-    "camp-obligatoriu": "The field is required"
+    "camp-obligatoriu": "The field is required",
+    "titlu-informare": "Information",
+    "mesaj-op-succes": "The operation was successful.",
+    "titlu-eroare": "Error",
+    "formular-invalid": "The form is invalid. Complete the fields."
   },
   "avm": {
+    "anuleaza": "Cancel",
+    "salveaza": "Save",
     "avm-lista": "List of maritime notices",
     "adauga": "Add maritime notice",
     "nava": "Ship",

@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AvEditComponent } from './av-edit/av-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { NgbInputDatepicker, NgbTimepicker } from "@ng-bootstrap/ng-bootstrap";
 
 
 @NgModule({
@@ -19,7 +20,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
     AvizareMaritimaRoutingModule,
     ReactiveFormsModule,
     TranslateModule,
-    NgSelectModule
+    NgSelectModule,
+    NgbInputDatepicker,
+    NgbTimepicker
   ]
 })
 export class AvizareMaritimaModule { }

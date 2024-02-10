@@ -2,7 +2,6 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { HTTP_INTERCEPTORS, HttpBackend, HttpClient, HttpClientModule } from "@angular/common/http";
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
@@ -10,6 +9,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { LanguageInterceptor } from "./interceptors/language/language.interceptor";
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 export function HttpLoaderFactory(httpHandler: HttpBackend) {
   return new TranslateHttpLoader(new HttpClient(httpHandler));
@@ -39,6 +40,7 @@ export function initializeKeycloak(keycloak: KeycloakService) {
     HttpClientModule,
     AppRoutingModule,
     KeycloakAngularModule,
+    BrowserAnimationsModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -47,7 +49,7 @@ export function initializeKeycloak(keycloak: KeycloakService) {
       },
       defaultLanguage: 'ro'
     }),
-    NgbModule
+    ToastrModule.forRoot()
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LanguageInterceptor, multi: true },

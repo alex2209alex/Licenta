@@ -4,6 +4,7 @@ import { AvSearch } from './av-search.model';
 import { Observable } from 'rxjs';
 import { AvListItem } from './av-list-item.model';
 import { API_URL } from 'src/app/app.constants';
+import { AvizareMaritima } from "./av.model";
 
 @Injectable({
   providedIn: 'root'
@@ -20,5 +21,9 @@ export class AvService {
     }
 
     return this.http.get<AvListItem[]>(this.url, {params:queryParams});
+  }
+
+  add(item: AvizareMaritima): Observable<void> {
+    return this.http.post<void>(this.url, item);
   }
 }

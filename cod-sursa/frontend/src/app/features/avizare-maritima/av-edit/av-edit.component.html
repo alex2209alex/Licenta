@@ -1,32 +1,65 @@
 <div class="row">
-    <div class="col-12">
-        <h3>{{'avm.adauga' | translate}}</h3>
-    </div>
+  <div class="col-12">
+    <h3>{{'avm.adauga' | translate}}</h3>
+  </div>
 </div>
 <div class="spinner-border" role="status" *ngIf="isLoading">
-    <span class="visually-hidden">Loading...</span>
+  <span class="visually-hidden">Loading...</span>
 </div>
 <ng-container *ngIf="!isLoading">
-    <form [formGroup]="myForm">
-        <div class="row mb-1">
-            <div class="col-12 col-md-4 offset-md-4">
-                <label for="port" class="form-label">{{'avm.port' | translate}} *</label>
-                <ng-select id="port" [items]="ports" bindLabel="label" bindValue="id" formControlName="port">
-                </ng-select>
-                <small class="text-danger" *ngIf="controls.port.hasError('required') && controls.port.touched">
-                    {{'app.camp-obligatoriu' | translate}}
-                </small>
-            </div>
+  <form [formGroup]="myForm">
+    <div class="row mb-1">
+      <div class="col-12 col-md-4 offset-md-4">
+        <label for="port" class="form-label">{{'avm.port' | translate}} *</label>
+        <ng-select id="port" [items]="ports" bindLabel="label" formControlName="port">
+        </ng-select>
+        <small class="text-danger" *ngIf="controls.port.hasError('required') && controls.port.touched">
+          {{'app.camp-obligatoriu' | translate}}
+        </small>
+      </div>
+    </div>
+    <div class="row mb-1">
+      <div class="col-12 col-md-4 offset-md-4">
+        <label for="ship" class="form-label">{{'avm.nava' | translate}} *</label>
+        <ng-select id="ship" [items]="ships" bindLabel="label" formControlName="ship">
+        </ng-select>
+        <small class="text-danger" *ngIf="controls.ship.hasError('required') && controls.ship.touched">
+          {{'app.camp-obligatoriu' | translate}}
+        </small>
+      </div>
+    </div>
+    <div class="row mb-1">
+      <div class="col-12 col-md-2 offset-md-4">
+        <label for="ship" class="form-label">{{'avm.eta' | translate}} *</label>
+        <div class="input-group">
+          <input
+            class="form-control"
+            placeholder="dd-mm-yyyy"
+            [minDate]="minDate"
+            name="dp"
+            formControlName="estimatedArrivalDate"
+            ngbDatepicker
+            #d="ngbDatepicker"
+          />
+          <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
         </div>
-        <div class="row mb-1">
-            <div class="col-12 col-md-4 offset-md-4">
-                <label for="ship" class="form-label">{{'avm.nava' | translate}} *</label>
-                <ng-select id="ship" [items]="ships" bindLabel="label" bindValue="id" formControlName="ship">
-                </ng-select>
-                <small class="text-danger" *ngIf="controls.ship.hasError('required') && controls.ship.touched">
-                    {{'app.camp-obligatoriu' | translate}}
-                </small>
-            </div>
-        </div>
-    </form>
+        <small class="text-danger" *ngIf="controls.estimatedArrivalDate.hasError('required') && controls.estimatedArrivalDate.touched">
+          {{'app.camp-obligatoriu' | translate}}
+        </small>
+      </div>
+      <div class="col-12 col-md-2">
+        <label for="ship" class="form-label">{{'avm.ora' | translate}} *</label>
+        <ngb-timepicker formControlName="estimatedArrivalTime"></ngb-timepicker>
+        <small class="text-danger" *ngIf="controls.estimatedArrivalTime.hasError('required') && controls.estimatedArrivalTime.touched">
+          {{'app.camp-obligatoriu' | translate}}
+        </small>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 text-center">
+        <button type="button" class="btn btn-secondary me-2" (click)="onClickCancel()">{{'avm.anuleaza' | translate}}</button>
+        <button type="button" class="btn btn-primary" [disabled]="isSaving" (click)="onClickSubmit()">{{'avm.salveaza' | translate}}</button>
+      </div>
+    </div>
+  </form>
 </ng-container>
