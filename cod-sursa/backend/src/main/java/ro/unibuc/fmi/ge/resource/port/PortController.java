@@ -19,7 +19,7 @@ public class PortController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_AGENT_NAVA')")
+    @PreAuthorize("isAuthenticated()")
     public List<GenericDto> getAll() {
         return finderService.findAll();
     }

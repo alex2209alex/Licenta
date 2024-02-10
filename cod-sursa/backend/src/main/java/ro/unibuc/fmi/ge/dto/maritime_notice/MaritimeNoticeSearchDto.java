@@ -8,6 +8,8 @@ import ro.unibuc.fmi.ge.dto.MaritimeNoticeDocumentStatus;
 @Getter
 public class MaritimeNoticeSearchDto {
     private Integer documentStatus;
+    private Long companyId;
+    private Boolean isAuthority;
 
     public MaritimeNoticeDocumentStatus getDocumentStatus() {
         if (documentStatus != null) {

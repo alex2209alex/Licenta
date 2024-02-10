@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import ro.unibuc.fmi.ge.dto.MaritimeNoticeDocumentStatus;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,7 +19,7 @@ public class MaritimeNotice {
     private Long id;
 
     @Column(name = "data_ora_estimare_sosire")
-    private LocalDateTime estimatedArrivalDateTime;
+    private Instant estimatedArrivalDateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="fk_agent")

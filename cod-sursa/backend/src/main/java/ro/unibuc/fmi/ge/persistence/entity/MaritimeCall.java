@@ -3,6 +3,7 @@ package ro.unibuc.fmi.ge.persistence.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import ro.unibuc.fmi.ge.dto.MaritimeCallStatus;
 
 @Entity
 @Table(name = "escala")
@@ -23,7 +24,7 @@ public class MaritimeCall {
     private Port port;
 
     @Column(name = "stare_escala")
-    private Integer status;
+    private MaritimeCallStatus status;
 
     @Override
     public int hashCode() {

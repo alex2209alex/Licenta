@@ -20,6 +20,9 @@ https://jwt.io/ pt decodare token
 kc.bat start-dev --db postgres --db-url jdbc:postgresql://localhost/postgres --db-username postgres --db-password postgres --db-schema keyclock
 http://localhost:8080/
 user si parola: admin admin
+ROLE_AGENT_NAVA
+ROLE_OPERATOR
+
 
 Angular keycloak
 https://www.npmjs.com/package/keycloak-angular
@@ -43,3 +46,27 @@ https://builtin.com/software-engineering-perspectives/forkjoin
 
 Lombock super builder
 https://www.baeldung.com/lombok-builder-inheritance
+
+To do:
+Implementare gateway
+Documentare pasi autentificare(implementare)
+
+Date time picker configurare
+https://ng-bootstrap.github.io/releases/15.x/#/components/timepicker/examples
+https://ng-bootstrap.github.io/releases/15.x/#/components/datepicker/examples#adapter
+MyNgbDateAdapter
+MyNgbDateParserFormatter
+
+Configurare toaster(alerta)
+Se va utiliza libraria ngx-toastr
+https://www.npmjs.com/package/ngx-toastr
+Pentru a se configura aceasta librarie trebuie avuta in vedere compatibilitatea cu versiunea de angular prezenta in proiect. Deoarece in proiect se utilizeza angular 16.x vom rula comanda: 
+npm install ngx-toastr@17
+Aceasta librarie are ca dependenta libraria @angular/animations
+Daca nu exist in proiect se va rula comanda:
+
+
+
+Data si ora format ISO 8601
+vom utiliza day.js pe parete de angular
+https://day.js.org/docs/en/installation/node-js

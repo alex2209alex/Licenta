@@ -19,7 +19,7 @@ public class ShipController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_AGENT_NAVA')")
+    @PreAuthorize("isAuthenticated()")
     public List<ShipDto> getAll() {
         return finderService.findAll();
     }

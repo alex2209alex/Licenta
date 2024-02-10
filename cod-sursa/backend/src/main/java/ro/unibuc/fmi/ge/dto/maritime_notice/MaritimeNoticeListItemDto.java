@@ -4,15 +4,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Setter
 @Getter
 @Builder
 public class MaritimeNoticeListItemDto {
-    private String estimatedArrivalTime;
-
+    private Long id;
+    private Instant estimatedArrivalTime;
     private String agentName;
-
     private String shipName;
-
+    private String portName;
     private Integer documentStatus;
 }
