@@ -173,4 +173,4 @@ INSERT INTO ge.firma(id, den_firma, tip_firma)
 VALUES (6, 'DECIROM', 1);
 -- companie de pilotaj
 INSERT INTO ge.firma(id, den_firma, tip_firma)
-VALUES (7, '	COMPANIA DE PILOTAJ PILOT SERVICE SA', 3);
+VALUES (7, 'COMPANIA DE PILOTAJ PILOT SERVICE SA', 3);

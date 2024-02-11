@@ -70,3 +70,8 @@ Daca nu exist in proiect se va rula comanda:
 Data si ora format ISO 8601
 vom utiliza day.js pe parete de angular
 https://day.js.org/docs/en/installation/node-js
+
+SELECT *
+FROM maritime_notice mn
+JOIN company c ON mn.fk_agent = c.id_company
+WHERE c.id_company = ?

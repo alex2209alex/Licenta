@@ -8,6 +8,7 @@ import ro.unibuc.fmi.ge.dto.GenericDto;
 import ro.unibuc.fmi.ge.dto.ShipDto;
 
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,4 +21,5 @@ public class MaritimeNoticeDto {
     @NotNull
     private @Valid GenericDto port;
     private GenericDto agent;
+    private List<@Valid DeclaredCargoDto> cargos;
 }
