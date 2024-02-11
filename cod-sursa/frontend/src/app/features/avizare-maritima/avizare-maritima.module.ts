@@ -7,7 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AvEditComponent } from './av-edit/av-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { NgbInputDatepicker, NgbTimepicker } from "@ng-bootstrap/ng-bootstrap";
+import { NgbInputDatepicker, NgbTimepicker, NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 
 
 @NgModule({
@@ -22,7 +22,8 @@ import { NgbInputDatepicker, NgbTimepicker } from "@ng-bootstrap/ng-bootstrap";
     TranslateModule,
     NgSelectModule,
     NgbInputDatepicker,
-    NgbTimepicker
+    NgbTimepicker,
+    NgbTooltip
   ]
 })
 export class AvizareMaritimaModule { }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ShipService } from '../../shared/ship.service';
 import { PortService } from '../../shared/port.service';
 import { catchError, forkJoin, throwError } from 'rxjs';
@@ -18,13 +18,15 @@ import { TranslateService } from "@ngx-translate/core";
 import { AvizareMaritima } from "../shared/av.model";
 import * as dayjs from "dayjs";
 import { AvService } from "../shared/av.service";
+import { CargoService } from "../../shared/cargo.service";
+import { DeclaredCargo } from "../shared/declared-cargo.model";
 
 @Component({
   selector: 'ge-av-edit',
   templateUrl: './av-edit.component.html',
   styleUrls: ['./av-edit.component.css'],
   providers: [NgbTimepickerConfig,
-    { provide: NgbDateParserFormatter, useClass: MyNgbDateParserFormatter },
+    {provide: NgbDateParserFormatter, useClass: MyNgbDateParserFormatter},
   ]
 })
 export class AvEditComponent implements OnInit {
@@ -33,17 +35,20 @@ export class AvEditComponent implements OnInit {
   isSaving: boolean = false;
   ships: Generic[] = [];
   ports: Generic[] = [];
+  cargos: Generic[] = [];
   minDate: NgbDate;
 
   private sources = [
     this.shipService.getAll(),
-    this.portService.getAll()
+    this.portService.getAll(),
+    this.cargoService.getAll()
   ];
 
   constructor(
     private fb: FormBuilder,
     private shipService: ShipService,
     private portService: PortService,
+    private cargoService: CargoService,
     private router: Router,
     private config: NgbTimepickerConfig,
     private toastr: ToastrService,
@@ -54,7 +59,8 @@ export class AvEditComponent implements OnInit {
       'estimatedArrivalDate': [null, [Validators.required]],
       'estimatedArrivalTime': [null, [Validators.required]],
       'ship': [null, [Validators.required]],
-      'port': [null, [Validators.required]]
+      'port': [null, [Validators.required]],
+      'cargos': this.fb.array([])
     });
     this.config.spinners = false;
     const today = new Date();
@@ -64,18 +70,19 @@ export class AvEditComponent implements OnInit {
   ngOnInit(): void {
     this.isLoading = true;
     forkJoin(this.sources)
-    .pipe(
-      catchError((error) => {
+      .pipe(
+        catchError((error) => {
+          this.isLoading = false;
+          this.goToList();
+          return throwError(() => error);
+        })
+      )
+      .subscribe(resData => {
+        this.ships = resData[0];
+        this.ports = resData[1];
+        this.cargos = resData[2];
         this.isLoading = false;
-        this.goToList();
-        return throwError(() => error);
-      })
-    )
-    .subscribe(resData => {
-      this.ships = resData[0];
-      this.ports = resData[1];
-      this.isLoading = false;
-    });
+      });
   }
 
   get controls() {
@@ -83,8 +90,25 @@ export class AvEditComponent implements OnInit {
       estimatedArrivalDate: this.myForm.get('estimatedArrivalDate')!,
       estimatedArrivalTime: this.myForm.get('estimatedArrivalTime')!,
       ship: this.myForm.get('ship')!,
-      port: this.myForm.get('port')!
+      port: this.myForm.get('port')!,
+      cargos: this.myForm.controls["cargos"] as FormArray
     }
+  }
+
+  castToFormGroup(control: AbstractControl) {
+    return control as FormGroup;
+  }
+
+  addCargo() {
+    const cargoForm = this.fb.group({
+      cargo: [null, Validators.required],
+      quantity: [null, [Validators.required, Validators.min(0)]]
+    });
+    this.controls.cargos.push(cargoForm);
+  }
+
+  onClickDeleteCargo(index: number) {
+    this.controls.cargos.removeAt(index);
   }
 
   onClickCancel() {
@@ -129,6 +153,13 @@ export class AvEditComponent implements OnInit {
     item.ship = this.controls.ship.value;
     item.port = this.controls.port.value;
     item.estimatedArrivalDateTime = this.buildDateTime(this.controls.estimatedArrivalDate.value, this.controls.estimatedArrivalTime.value);
+    for (let cargoForm of this.controls.cargos.controls) {
+      const cargoGroup = this.castToFormGroup(cargoForm);
+      const declaredCargo: DeclaredCargo = new DeclaredCargo();
+      declaredCargo.cargo = cargoGroup.controls['cargo'].value;
+      declaredCargo.quantity = cargoGroup.controls['quantity'].value;
+      item.cargos.push(declaredCargo);
+    }
     return item;
   }
 

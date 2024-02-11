@@ -5,12 +5,16 @@
   },
   "app": {
     "camp-obligatoriu": "Câmpul este obligatoriu",
+    "valoare-minima": "Câmpul are valoarea minimă {{min}}",
     "titlu-informare": "Informare",
     "mesaj-op-succes": "Operația a fost efectuată cu succes.",
     "titlu-eroare": "Eroare",
     "formular-invalid": "Formularul este invalid. Completați câmpurile conform indicaților"
   },
   "avm": {
+    "adauga-marfa": "Adaugă marfă",
+    "sterge-marfa": "Sterge marfa",
+    "marfa-declarata": "Marfă declarată",
     "anuleaza": "Anulează",
     "salveaza": "Salvează",
     "avm-lista": "Listă de avizări maritime",
@@ -20,6 +24,8 @@
     "eta": "Dată estimativă de sosire",
     "ora": "Ora estimativă de sosire",
     "port": "Port",
+    "selectati-marfa": "Selectați marfa",
+    "introduceti-cantitatea": "Introduceți cantitatea",
     "status": "Status",
     "status-0": "Așteaptă aprobări",
     "status-1": "Aprobat de ANR",

@@ -5,12 +5,16 @@
   },
   "app": {
     "camp-obligatoriu": "The field is required",
+    "valoare-minima": "The field has minimal value {{min}}",
     "titlu-informare": "Information",
     "mesaj-op-succes": "The operation was successful.",
     "titlu-eroare": "Error",
     "formular-invalid": "The form is invalid. Complete the fields."
   },
   "avm": {
+    "adauga-marfa": "Add cargo",
+    "sterge-marfa": "Delete cargo",
+    "marfa-declarata": "Declared cargo",
     "anuleaza": "Cancel",
     "salveaza": "Save",
     "avm-lista": "List of maritime notices",
@@ -20,6 +24,8 @@
     "eta": "Estimated arrival date",
     "ora": "Estimated arrival time",
     "port": "Port",
+    "selectati-marfa": "Select cargo",
+    "introduceti-cantitatea": "Introduce quantity",
     "status": "Status",
     "status-0": "Awaiting approval",
     "status-1": "Aproved by ANR",

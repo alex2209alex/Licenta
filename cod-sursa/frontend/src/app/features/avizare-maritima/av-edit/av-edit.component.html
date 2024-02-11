@@ -9,7 +9,7 @@
 <ng-container *ngIf="!isLoading">
   <form [formGroup]="myForm">
     <div class="row mb-1">
-      <div class="col-12 col-md-4 offset-md-4">
+      <div class="col-12 col-md-6 offset-md-3">
         <label for="port" class="form-label">{{'avm.port' | translate}} *</label>
         <ng-select id="port" [items]="ports" bindLabel="label" formControlName="port">
         </ng-select>
@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="row mb-1">
-      <div class="col-12 col-md-4 offset-md-4">
+      <div class="col-12 col-md-6 offset-md-3">
         <label for="ship" class="form-label">{{'avm.nava' | translate}} *</label>
         <ng-select id="ship" [items]="ships" bindLabel="label" formControlName="ship">
         </ng-select>
@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="row mb-1">
-      <div class="col-12 col-md-2 offset-md-4">
+      <div class="col-12 col-md-3 offset-md-3">
         <label for="ship" class="form-label">{{'avm.eta' | translate}} *</label>
         <div class="input-group">
           <input
@@ -43,22 +43,61 @@
           />
           <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
         </div>
-        <small class="text-danger" *ngIf="controls.estimatedArrivalDate.hasError('required') && controls.estimatedArrivalDate.touched">
+        <small class="text-danger"
+               *ngIf="controls.estimatedArrivalDate.hasError('required') && controls.estimatedArrivalDate.touched">
           {{'app.camp-obligatoriu' | translate}}
         </small>
       </div>
-      <div class="col-12 col-md-2">
+      <div class="col-12 col-md-3">
         <label for="ship" class="form-label">{{'avm.ora' | translate}} *</label>
         <ngb-timepicker formControlName="estimatedArrivalTime"></ngb-timepicker>
-        <small class="text-danger" *ngIf="controls.estimatedArrivalTime.hasError('required') && controls.estimatedArrivalTime.touched">
+        <small class="text-danger"
+               *ngIf="controls.estimatedArrivalTime.hasError('required') && controls.estimatedArrivalTime.touched">
           {{'app.camp-obligatoriu' | translate}}
         </small>
       </div>
     </div>
-    <div class="row">
+    <div class="row mb-1">
       <div class="col-12 text-center">
-        <button type="button" class="btn btn-secondary me-2" (click)="onClickCancel()">{{'avm.anuleaza' | translate}}</button>
-        <button type="button" class="btn btn-primary" [disabled]="isSaving" (click)="onClickSubmit()">{{'avm.salveaza' | translate}}</button>
+        {{'avm.marfa-declarata' | translate}}
+        <button type="button" class="btn btn-success" ngbTooltip="{{'avm.adauga-marfa' | translate}}" (click)="addCargo()">
+          <i class="bi bi-plus-circle"></i>
+        </button>
+      </div>
+    </div>
+    <div class="row mb-1" *ngFor="let cargoForm of controls.cargos.controls; let i = index"
+         [formGroup]="castToFormGroup(cargoForm)">
+      <div class="col-5 col-md-3 offset-md-3">
+        <ng-select placeholder="{{'avm.selectati-marfa' | translate}}" [items]="cargos" bindLabel="label" formControlName="cargo">
+        </ng-select>
+        <small class="text-danger"
+               *ngIf="castToFormGroup(cargoForm).controls['cargo'].hasError('required') && castToFormGroup(cargoForm).controls['cargo'].touched">
+          {{'app.camp-obligatoriu' | translate}}
+        </small>
+      </div>
+      <div class="col-5 col-md-2">
+        <input class="form-control" placeholder="{{'avm.introduceti-cantitatea' | translate}}" type="number" formControlName="quantity">
+        <small class="text-danger"
+               *ngIf="castToFormGroup(cargoForm).controls['quantity'].hasError('required') && castToFormGroup(cargoForm).controls['quantity'].touched">
+          {{'app.camp-obligatoriu' | translate}}
+        </small>
+        <small class="text-danger"
+               *ngIf="castToFormGroup(cargoForm).controls['quantity'].hasError('min') && castToFormGroup(cargoForm).controls['quantity'].touched">
+          {{'app.valoare-minima' | translate : {min: 0} }}
+        </small>
+      </div>
+      <div class="col-2 col-md-1">
+        <button class="btn btn-danger" ngbTooltip="{{'avm.sterge-marfa' | translate}}" (click)="onClickDeleteCargo(i)">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+    <div class="row mb-1">
+      <div class="col-12 text-center">
+        <button type="button" class="btn btn-secondary me-2"
+                (click)="onClickCancel()">{{'avm.anuleaza' | translate}}</button>
+        <button type="button" class="btn btn-primary" [disabled]="isSaving"
+                (click)="onClickSubmit()">{{'avm.salveaza' | translate}}</button>
       </div>
     </div>
   </form>

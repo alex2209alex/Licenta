@@ -1,4 +1,5 @@
 import { Generic } from "../../shared/generic.model";
+import { DeclaredCargo } from "./declared-cargo.model";
 
 export class AvizareMaritima {
   id: number | null = null;
@@ -6,4 +7,5 @@ export class AvizareMaritima {
   ship: Generic | null = null;
   port: Generic | null = null;
   agent: Generic | null = null;
+  cargos: DeclaredCargo[] = [];
 }
