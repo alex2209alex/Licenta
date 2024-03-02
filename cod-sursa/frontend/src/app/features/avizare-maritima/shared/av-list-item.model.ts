@@ -1,4 +1,5 @@
 export class AvListItem {
+    id: number | null = null;
     estimatedArrivalTime: string | null = null;
     agentName: string | null = null;
     portName: string | null = null;

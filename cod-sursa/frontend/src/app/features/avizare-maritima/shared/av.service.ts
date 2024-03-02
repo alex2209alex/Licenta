@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { AvListItem } from './av-list-item.model';
 import { API_URL } from 'src/app/app.constants';
 import { AvizareMaritima } from "./av.model";
+import { Resolution } from "../../shared/resolution.model";
 
 @Injectable({
   providedIn: 'root'
@@ -25,5 +26,13 @@ export class AvService {
 
   add(item: AvizareMaritima): Observable<void> {
     return this.http.post<void>(this.url, item);
+  }
+
+  findById(id: number): Observable<AvizareMaritima> {
+    return this.http.get<AvizareMaritima>(this.url + "/" + id);
+  }
+
+  resolve(resolution: Resolution, id: number): Observable<void> {
+    return this.http.post<void>(this.url + "/resolve/" + id, resolution);
   }
 }

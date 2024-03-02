@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AvService } from '../shared/av.service';
 import { AvListItem } from '../shared/av-list-item.model';
 import * as dayjs from "dayjs";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'ge-av-home',
@@ -11,7 +12,7 @@ import * as dayjs from "dayjs";
 export class AvHomeComponent implements OnInit {
   items: AvListItem[] = [];
 
-  constructor(private apiService: AvService) {
+  constructor(private apiService: AvService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -27,5 +28,9 @@ export class AvHomeComponent implements OnInit {
       return dayjs(dateTime).format('DD-MM-YYYY HH:mm')
     }
     return null;
+  }
+
+  public goToResolve(id: number) {
+    this.router.navigate(['avizare-maritima', id, 'resolve']);
   }
 }

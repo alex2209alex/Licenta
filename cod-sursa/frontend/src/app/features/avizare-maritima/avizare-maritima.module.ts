@@ -8,12 +8,15 @@ import { AvEditComponent } from './av-edit/av-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgbInputDatepicker, NgbTimepicker, NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
-
+import { AvDetailsComponent } from './av-details/av-details.component';
+import { AvResolveComponent } from './av-resolve/av-resolve.component';
 
 @NgModule({
   declarations: [
     AvHomeComponent,
-    AvEditComponent
+    AvEditComponent,
+    AvDetailsComponent,
+    AvResolveComponent
   ],
   imports: [
     CommonModule,

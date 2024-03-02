@@ -18,27 +18,35 @@
     <div class="col-2">
         <b>{{'avm.agent-nava' | translate}}</b>
     </div>
-    <div class="col-3">
+    <div class="col-2">
         <b>{{'avm.eta' | translate}}</b>
     </div>
     <div class="col-3">
         <b>{{'avm.status' | translate}}</b>
     </div>
 </div>
-<div class="row border-top mb-1" *ngFor="let item of items">
-    <div class="col-2">
+<div class="row border-top" *ngFor="let item of items">
+    <div class="col-2 m-auto">
         {{item.shipName}}
     </div>
-    <div class="col-2">
+    <div class="col-2 m-auto">
       {{item.portName}}
     </div>
-    <div class="col-2">
+    <div class="col-2 m-auto">
         {{item.agentName}}
     </div>
-    <div class="col-3">
+    <div class="col-2 m-auto">
         {{formatDateTime(item.estimatedArrivalTime)}}
     </div>
-    <div class="col-3">
+    <div class="col-3 m-auto">
         {{('avm.status-' + item.documentStatus) | translate}}
+    </div>
+    <div class="col-1 m-auto">
+      <button type="button" class="btn btn-secondary me-2" routerLink="{{item.id!}}" ngbTooltip="{{'app.vizualizare' | translate}}">
+        <i class="bi bi-eye"></i>
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="goToResolve(item.id!)" ngbTooltip="{{'app.avizeaza' | translate}}">
+        <i class="bi bi-check"></i>
+      </button>
     </div>
 </div>

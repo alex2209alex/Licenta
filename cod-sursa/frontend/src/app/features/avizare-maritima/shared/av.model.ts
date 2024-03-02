@@ -8,4 +8,6 @@ export class AvizareMaritima {
   port: Generic | null = null;
   agent: Generic | null = null;
   cargos: DeclaredCargo[] = [];
+  rejectionReason: string | null = null;
+  status: number | null = null;
 }

@@ -1,0 +1,106 @@
+<div class="row">
+  <div class="col-12">
+    <h3>{{'avm.resolutie-avizare' | translate}}</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 text-end">
+    <button type="button" class="btn btn-primary" (click)="goToList()">{{'app.inapoi' | translate}}</button>
+  </div>
+</div>
+<div class="spinner-border" role="status" *ngIf="isLoading">
+  <span class="visually-hidden">Loading...</span>
+</div>
+<ng-container *ngIf="!isLoading">
+  <div class="row mb-1">
+    <div class="col-12 col-md-6 offset-md-3">
+      <label class="form-label fw-bolder">{{'avm.port' | translate}}:</label>
+      {{maritimeNotice?.port?.label}}
+    </div>
+  </div>
+  <div class="row mb-1">
+    <div class="col-12 col-md-6 offset-md-3">
+      <label class="form-label fw-bolder">{{'avm.nava' | translate}}:</label>
+      {{maritimeNotice?.ship?.label}}
+    </div>
+  </div>
+  <div class="row mb-1">
+    <div class="col-12 col-md-6 offset-md-3">
+      <label class="form-label fw-bolder">{{'avm.agent-nava' | translate}}:</label>
+      {{maritimeNotice?.agent?.label}}
+    </div>
+  </div>
+  <div class="row mb-1">
+    <div class="col-12 col-md-6 offset-md-3">
+      <label class="form-label fw-bolder">{{'avm.eta' | translate}}:</label>
+      {{formatDateTime(maritimeNotice?.estimatedArrivalDateTime!)}}
+    </div>
+  </div>
+  <div class="row mb-1">
+    <div class="col-12 col-md-6 offset-md-3">
+      <label class="form-label fw-bolder">{{'avm.status' | translate}}:</label>
+      {{('avm.status-' + maritimeNotice?.status) | translate}}
+    </div>
+  </div>
+  <div class="row mb-1" *ngIf="maritimeNotice?.rejectionReason !== null">
+    <div class="col-12 col-md-6 offset-md-3">
+      <label class="form-label fw-bolder">{{'app.observations' | translate}}:</label>
+      {{('avm.status-' + maritimeNotice?.rejectionReason) | translate}}
+    </div>
+  </div>
+  <div class="row mb-1">
+    <div class="col-6 col-md-3 offset-md-3">
+      <label class="form-label fw-bolder">{{'avm.marfa' | translate}}</label>
+    </div>
+    <div class="col-6 col-md-3">
+      <label class="form-label fw-bolder">{{'avm.cantitate' | translate}}</label>
+    </div>
+  </div>
+  <div class="row mb-1" *ngFor="let cargo of maritimeNotice?.cargos">
+    <div class="col-6 col-md-3 offset-md-3 border-top">
+      {{cargo.cargo?.label}}
+    </div>
+    <div class="col-6 col-md-3 border-top">
+      {{cargo.quantity}}
+    </div>
+  </div>
+  <form [formGroup]="myForm">
+    <div class="row mb-1">
+      <div class="col-12 col-md-6 offset-md-3">
+        <label class="form-label">{{'app.alege-rezolutie' | translate}}</label>
+      </div>
+    </div>
+    <div class="row mb-1">
+      <div class="col-12 col-md-6 offset-3">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="resolution" id="resolution_0" formControlName="resolution" value="0">
+          <label class="form-check-label" for="resolution_0">
+            {{'app.respinge' | translate}}
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-1">
+      <div class="col-12 col-md-6 offset-3">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="resolution" id="resolution_1" formControlName="resolution" value="1">
+          <label class="form-check-label" for="resolution_1">
+            {{'app.aproba' | translate}}
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-1">
+      <div class="col-12 col-md-6 offset-3">
+        <label for="reason" class="form-label">{{'app.observations' | translate}}</label>
+        <textarea class="form-control" id="reason"></textarea>
+      </div>
+    </div>
+    <div class="row mb-1">
+      <div class="col-12 text-center">
+        <button type="button" class="btn btn-secondary me-2" (click)="goToList()">{{'avm.anuleaza' | translate}}</button>
+        <button type="button" class="btn btn-primary" (click)="onClickSave()" [disabled]="isSaving">{{'avm.salveaza' | translate}}</button>
+      </div>
+    </div>
+  </form>
+</ng-container>
