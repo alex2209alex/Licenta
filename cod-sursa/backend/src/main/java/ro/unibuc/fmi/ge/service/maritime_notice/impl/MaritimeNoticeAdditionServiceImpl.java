@@ -1,7 +1,7 @@
 package ro.unibuc.fmi.ge.service.maritime_notice.impl;
 
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ro.unibuc.fmi.ge.dto.MaritimeCallStatus;
 import ro.unibuc.fmi.ge.dto.MaritimeNoticeDocumentStatus;
 import ro.unibuc.fmi.ge.dto.maritime_notice.DeclaredCargoDto;
