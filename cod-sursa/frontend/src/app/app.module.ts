@@ -11,6 +11,7 @@ import { HeaderComponent } from './header/header.component';
 import { LanguageInterceptor } from "./interceptors/language/language.interceptor";
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 
 export function HttpLoaderFactory(httpHandler: HttpBackend) {
   return new TranslateHttpLoader(new HttpClient(httpHandler));
@@ -35,22 +36,23 @@ export function initializeKeycloak(keycloak: KeycloakService) {
     AppComponent,
     HeaderComponent
   ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    AppRoutingModule,
-    KeycloakAngularModule,
-    BrowserAnimationsModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpBackend],
-      },
-      defaultLanguage: 'ro'
-    }),
-    ToastrModule.forRoot()
-  ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        AppRoutingModule,
+        KeycloakAngularModule,
+        BrowserAnimationsModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpBackend],
+            },
+            defaultLanguage: 'ro'
+        }),
+        ToastrModule.forRoot(),
+        NgbTooltip
+    ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LanguageInterceptor, multi: true },
     {

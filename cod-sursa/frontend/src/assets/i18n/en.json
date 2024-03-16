@@ -18,7 +18,8 @@
     "observations": "Observations",
     "alege-rezolutie": "Chose resolution",
     "aproba": "Approve",
-    "respinge": "Reject"
+    "respinge": "Reject",
+    "logout": "Logout"
   },
   "avm": {
     "resolutie-avizare": "Maritime notice resolution",

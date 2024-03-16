@@ -3,7 +3,7 @@
         <h3>{{'avm.avm-lista' | translate}}</h3>
     </div>
 </div>
-<div class="row">
+<div class="row" *ngIf="showAddBtn()">
     <div class="col-12 text-end">
         <button type="button" class="btn btn-primary" routerLink="new">{{'avm.adauga' | translate}}</button>
     </div>
@@ -45,8 +45,11 @@
       <button type="button" class="btn btn-secondary me-2" routerLink="{{item.id!}}" ngbTooltip="{{'app.vizualizare' | translate}}">
         <i class="bi bi-eye"></i>
       </button>
-      <button type="button" class="btn btn-secondary" (click)="goToResolve(item.id!)" ngbTooltip="{{'app.avizeaza' | translate}}">
+      <button type="button" class="btn btn-secondary" *ngIf="showResolveBtn(item)" (click)="goToResolve(item.id!)" ngbTooltip="{{'app.avizeaza' | translate}}">
         <i class="bi bi-check"></i>
+      </button>
+      <button type="button" class="btn btn-secondary" *ngIf="showEditBtn(item)" (click)="goToEdit(item.id!)" ngbTooltip="{{'app.editeaza' | translate}}">
+        <i class="bi bi-pencil-square"></i>
       </button>
     </div>
 </div>

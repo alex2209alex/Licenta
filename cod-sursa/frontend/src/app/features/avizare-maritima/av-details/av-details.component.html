@@ -45,7 +45,7 @@
   <div class="row mb-1" *ngIf="maritimeNotice?.rejectionReason !== null">
     <div class="col-12 col-md-6 offset-md-3">
       <label class="form-label fw-bolder">{{'app.observations' | translate}}:</label>
-      {{('avm.status-' + maritimeNotice?.rejectionReason) | translate}}
+      {{maritimeNotice?.rejectionReason}}
     </div>
   </div>
   <div class="row mb-1">
