@@ -8,6 +8,7 @@ spring:
   jpa:
     properties:
       hibernate.default_schema: ge
+      hibernate.format_sql: true
     open-in-view: false
   security:
     oauth2:
@@ -19,3 +20,5 @@ server:
 logging:
   level:
     org.springframework.security: warn
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace

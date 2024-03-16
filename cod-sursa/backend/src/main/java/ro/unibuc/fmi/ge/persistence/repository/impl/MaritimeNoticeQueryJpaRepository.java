@@ -73,21 +73,21 @@ public class MaritimeNoticeQueryJpaRepository implements MaritimeNoticeQueryRepo
     }
 
     @Override
-    public Optional<MaritimeNoticeDto> findForAuthority(Long idMaritimeNotice) {
+    public Optional<MaritimeNoticeDto> findById(Long idMaritimeNotice) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Tuple> cq = cb.createTupleQuery();
-        Root<DeclaredCargo> declaredCargo = cq.from(DeclaredCargo.class);
-        Join<DeclaredCargo, MaritimeNotice> maritimeNoticeJoin = declaredCargo.join(DeclaredCargo_.maritimeNotice, JoinType.RIGHT);
-        Join<MaritimeNotice, MaritimeCall> maritimeCallJoin = maritimeNoticeJoin.join(MaritimeNotice_.maritimeCall);
-        Join<MaritimeNotice, Company> companyJoin = maritimeNoticeJoin.join(MaritimeNotice_.agent);
+        Root<MaritimeNotice> maritimeNotice = cq.from(MaritimeNotice.class);
+        Join<MaritimeNotice, DeclaredCargo> declaredCargoJoin = maritimeNotice.join(MaritimeNotice_.declaredCargos, JoinType.LEFT);
+        Join<MaritimeNotice, MaritimeCall> maritimeCallJoin = maritimeNotice.join(MaritimeNotice_.maritimeCall);
+        Join<MaritimeNotice, Company> companyJoin = maritimeNotice.join(MaritimeNotice_.agent);
         Join<MaritimeCall, Port> portJoin = maritimeCallJoin.join(MaritimeCall_.port);
         Join<MaritimeCall, Ship> shipJoin = maritimeCallJoin.join(MaritimeCall_.ship);
-        Join<DeclaredCargo, Cargo> cargoJoin = declaredCargo.join(DeclaredCargo_.cargo);
+        Join<DeclaredCargo, Cargo> cargoJoin = declaredCargoJoin.join(DeclaredCargo_.cargo, JoinType.LEFT);
         cq.multiselect(
-                maritimeNoticeJoin.get(MaritimeNotice_.id).alias(MaritimeNotice_.ID),
-                maritimeNoticeJoin.get(MaritimeNotice_.estimatedArrivalDateTime).alias(MaritimeNotice_.ESTIMATED_ARRIVAL_DATE_TIME),
-                maritimeNoticeJoin.get(MaritimeNotice_.documentStatus).alias(MaritimeNotice_.DOCUMENT_STATUS),
-                maritimeNoticeJoin.get(MaritimeNotice_.rejectionReason).alias(MaritimeNotice_.REJECTION_REASON),
+                maritimeNotice.get(MaritimeNotice_.id).alias(MaritimeNotice_.ID),
+                maritimeNotice.get(MaritimeNotice_.estimatedArrivalDateTime).alias(MaritimeNotice_.ESTIMATED_ARRIVAL_DATE_TIME),
+                maritimeNotice.get(MaritimeNotice_.documentStatus).alias(MaritimeNotice_.DOCUMENT_STATUS),
+                maritimeNotice.get(MaritimeNotice_.rejectionReason).alias(MaritimeNotice_.REJECTION_REASON),
                 portJoin.get(Port_.id).alias(PORT_ID),
                 portJoin.get(Port_.name).alias(PORT_NAME),
                 shipJoin.get(Ship_.id).alias(SHIP_ID),
@@ -97,13 +97,13 @@ public class MaritimeNoticeQueryJpaRepository implements MaritimeNoticeQueryRepo
                 companyJoin.get(Company_.name).alias(COMPANY_NAME),
                 cargoJoin.get(Cargo_.id).alias(CARGO_ID),
                 cargoJoin.get(Cargo_.name).alias(CARGO_NAME),
-                declaredCargo.get(DeclaredCargo_.id).alias(DECLARED_CARGO_ID),
-                declaredCargo.get(DeclaredCargo_.quantity).alias(DeclaredCargo_.QUANTITY)
+                declaredCargoJoin.get(DeclaredCargo_.id).alias(DECLARED_CARGO_ID),
+                declaredCargoJoin.get(DeclaredCargo_.quantity).alias(DeclaredCargo_.QUANTITY)
         );
         cq.orderBy(
-                cb.asc(maritimeNoticeJoin.get(MaritimeNotice_.id))
+                cb.asc(maritimeNotice.get(MaritimeNotice_.id))
         );
-        cq.where(cb.and(cb.equal(maritimeNoticeJoin.get(MaritimeNotice_.id), idMaritimeNotice)));
+        cq.where(cb.and(cb.equal(maritimeNotice.get(MaritimeNotice_.id), idMaritimeNotice)));
         final TypedQuery<Tuple> typedQuery = em.createQuery(cq);
         List<Tuple> tuples = typedQuery.getResultList();
         return fromTuplesToDto(tuples);
@@ -111,7 +111,7 @@ public class MaritimeNoticeQueryJpaRepository implements MaritimeNoticeQueryRepo
 
     @Override
     public Optional<MaritimeNoticeDto> findForAgent(Long idMaritimeNotice, Long idAgent) {
-        Optional<MaritimeNoticeDto> maritimeNoticeDtoOptional = findForAuthority(idMaritimeNotice);
+        Optional<MaritimeNoticeDto> maritimeNoticeDtoOptional = findById(idMaritimeNotice);
         if (maritimeNoticeDtoOptional.isPresent()) {
             MaritimeNoticeDto maritimeNoticeDto = maritimeNoticeDtoOptional.get();
             if (maritimeNoticeDto.getAgent().getId().equals(idAgent)) {

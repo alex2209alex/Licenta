@@ -7,6 +7,8 @@ import ro.unibuc.fmi.ge.dto.MaritimeNoticeDocumentStatus;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "avizare_maritima")
@@ -37,6 +39,25 @@ public class MaritimeNotice {
 
     @Column(name = "motiv_respingere")
     private String rejectionReason;
+
+    @OneToMany(mappedBy = "maritimeNotice")
+    private Set<DeclaredCargo> declaredCargos;
+
+    public void addDeclaredCargo(DeclaredCargo declaredCargo) {
+        if (declaredCargos == null) {
+            declaredCargos = new HashSet<>();
+        }
+        declaredCargos.add(declaredCargo);
+        declaredCargo.setMaritimeNotice(this);
+    }
+
+    public void removeDeclaredCargo(DeclaredCargo declaredCargo) {
+        if (declaredCargos == null) {
+            declaredCargos = new HashSet<>();
+        }
+        declaredCargos.remove(declaredCargo);
+        declaredCargo.setMaritimeNotice(null);
+    }
 
     @Override
     public int hashCode() {

@@ -33,7 +33,7 @@ public class MaritimeNoticeFinderServiceImpl implements MaritimeNoticeFinderServ
 
     @Override
     public Optional<MaritimeNoticeDto> findForAuthority(Long idMaritimeNotice) {
-        return repository.findForAuthority(idMaritimeNotice);
+        return repository.findById(idMaritimeNotice);
     }
 
     @Override

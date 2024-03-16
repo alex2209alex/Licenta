@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface MaritimeNoticeQueryRepository {
     List<MaritimeNoticeListItemDto> search(MaritimeNoticeSearchDto searchDto);
 
-    Optional<MaritimeNoticeDto> findForAuthority(Long idMaritimeNotice);
+    Optional<MaritimeNoticeDto> findById(Long idMaritimeNotice);
 
     Optional<MaritimeNoticeDto> findForAgent(Long idMaritimeNotice, Long idAgent);
 }
