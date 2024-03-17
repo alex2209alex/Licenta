@@ -1,0 +1,2 @@
+- de tratat erorile global
+- de validat serverside ca data sa fie de azi sau din vitor la av

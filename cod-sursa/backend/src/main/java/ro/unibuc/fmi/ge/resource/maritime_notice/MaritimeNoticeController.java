@@ -11,6 +11,7 @@ import ro.unibuc.fmi.ge.dto.maritime_notice.MaritimeNoticeSearchDto;
 import ro.unibuc.fmi.ge.exceptions.NotFoundException;
 import ro.unibuc.fmi.ge.service.maritime_notice.MaritimeNoticeAdditionService;
 import ro.unibuc.fmi.ge.service.maritime_notice.MaritimeNoticeFinderService;
+import ro.unibuc.fmi.ge.service.maritime_notice.MaritimeNoticeModificationService;
 import ro.unibuc.fmi.ge.service.maritime_notice.MaritimeNoticeResolutionService;
 import ro.unibuc.fmi.ge.shared.RoleConstants;
 import ro.unibuc.fmi.ge.shared.UserHelper;
@@ -22,16 +23,18 @@ import java.util.List;
 public class MaritimeNoticeController {
     private final MaritimeNoticeFinderService visualisationService;
     private final MaritimeNoticeAdditionService additionService;
+    private final MaritimeNoticeModificationService modificationService;
     private final MaritimeNoticeResolutionService maritimeNoticeResolutionService;
     private final UserHelper userHelper;
 
     public MaritimeNoticeController(
             MaritimeNoticeFinderService visualisationService,
             MaritimeNoticeAdditionService additionService,
-            MaritimeNoticeResolutionService maritimeNoticeResolutionService,
+            MaritimeNoticeModificationService modificationService, MaritimeNoticeResolutionService maritimeNoticeResolutionService,
             UserHelper userHelper) {
         this.visualisationService = visualisationService;
         this.additionService = additionService;
+        this.modificationService = modificationService;
         this.maritimeNoticeResolutionService = maritimeNoticeResolutionService;
         this.userHelper = userHelper;
     }
@@ -52,6 +55,13 @@ public class MaritimeNoticeController {
         Long companyId = userHelper.getUserCompanyId();
         dto.setAgent(GenericDto.builder().id(companyId).build());
         additionService.add(dto);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('" + RoleConstants.ROLE_AGENT_NAVA + "')")
+    public void update(@PathVariable Long id, @RequestBody @Valid MaritimeNoticeDto dto) {
+        dto.setId(id);
+        modificationService.update(dto);
     }
 
     @GetMapping("/{id}")
