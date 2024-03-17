@@ -2,6 +2,7 @@ package ro.unibuc.fmi.ge.service.maritime_notice.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ro.unibuc.fmi.ge.dto.MaritimeCallStatus;
 import ro.unibuc.fmi.ge.dto.MaritimeNoticeDocumentStatus;
 import ro.unibuc.fmi.ge.dto.Resolution;
 import ro.unibuc.fmi.ge.dto.ResolutionDto;
@@ -47,6 +48,7 @@ public class MaritimeNoticeResolutionServiceImpl implements MaritimeNoticeResolu
             }
             if (Boolean.TRUE.equals(userHelper.isAPMCAuthority())) {
                 maritimeNotice.setDocumentStatus(MaritimeNoticeDocumentStatus.ANR_APMC_APPROVED);
+                maritimeNotice.getMaritimeCall().setStatus(MaritimeCallStatus.APPROVED);
             }
         }
     }
