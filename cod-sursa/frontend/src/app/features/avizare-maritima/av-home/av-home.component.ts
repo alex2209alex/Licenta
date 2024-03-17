@@ -5,6 +5,7 @@ import * as dayjs from "dayjs";
 import { Router } from "@angular/router";
 import { AvDocumentStatus } from "../shared/av-document-status";
 import { UserHelper } from "../../../shared/guard/user-helper";
+import { MCStatus } from "../shared/mc-status";
 
 @Component({
   selector: 'ge-av-home',
@@ -51,7 +52,15 @@ export class AvHomeComponent implements OnInit {
     return this.userHelper.isAgentNava() && avItem.documentStatus === AvDocumentStatus.REJECTED;
   }
 
+  showCancelBtn(avItem: AvListItem): boolean {
+    return this.userHelper.isAgentNava() && avItem.maritimeCallStatus === MCStatus.PLANNED;
+  }
+
   goToEdit(id: number) {
     this.router.navigate(['avizare-maritima', id, 'edit']);
+  }
+
+  goToCancel(id: number) {
+    this.router.navigate(['avizare-maritima', id, 'cancel']);
   }
 }

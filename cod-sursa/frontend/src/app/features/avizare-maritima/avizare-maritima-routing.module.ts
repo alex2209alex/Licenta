@@ -42,6 +42,14 @@ const routes: Routes = [
     }
   },
   {
+    path: ':id/cancel',
+    component: AvDetailsComponent,
+    canActivate: [AuthGuard],
+    data: {
+      hasAnyRole: [Role.ROLE_AGENT_NAVA]
+    }
+  },
+  {
     path: ':id/resolve',
     component: AvResolveComponent,
     canActivate: [AuthGuard],

@@ -14,6 +14,7 @@
     "vizualizare": "Visualize details",
     "avizeaza": "Approve",
     "editeaza": "Edit",
+    "anuleaza": "Cancel",
     "inapoi": "Back to list",
     "observations": "Observations",
     "alege-rezolutie": "Chose resolution",
@@ -45,7 +46,7 @@
     "status-1": "Approved by ANR",
     "status-2": "Approved by ANR and APMC",
     "status-3": "Rejected",
-    "status-4": "Canceled"
+    "status-4": "Cancelled"
   },
   "bp": {
     "bp-lista": "List of maritime pilotage bulletins"

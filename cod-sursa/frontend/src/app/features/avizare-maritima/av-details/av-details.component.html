@@ -64,4 +64,9 @@
       {{cargo.quantity}}
     </div>
   </div>
+  <div class="row">
+    <div class="col-12 text-center">
+      <button type="button" class="btn btn-danger" *ngIf="showCancelBtn" (click)="onCancel()">{{'app.anuleaza' | translate}}</button>
+    </div>
+  </div>
 </ng-container>

@@ -12,6 +12,7 @@ import * as dayjs from "dayjs";
 })
 export class AvDetailsComponent {
   idMaritimeNotice: number = -1;
+  showCancelBtn: boolean = false;
   isLoading: boolean = true;
   maritimeNotice: AvizareMaritima | null = null;
 
@@ -21,6 +22,9 @@ export class AvDetailsComponent {
   ngOnInit(): void {
     this.isLoading = true;
     this.idMaritimeNotice = Number(this.activatedRoute.snapshot.params['id']);
+    if (this.router.url.includes('cancel')) {
+      this.showCancelBtn = true;
+    }
     this.apiService.findById(this.idMaritimeNotice)
       .pipe(
         catchError((error) => {
@@ -44,6 +48,12 @@ export class AvDetailsComponent {
   }
 
   public goToList() {
-    this.router.navigate(['avizare-maritima']);
+    this.router.navigate(['avizare-maritima']).then();
+  }
+
+  onCancel() {
+    this.apiService.cancel(this.idMaritimeNotice).subscribe(() => {
+      this.goToList();
+    });
   }
 }

@@ -14,6 +14,7 @@
     "vizualizare": "Vezi detalii",
     "avizeaza": "Avizează",
     "editeaza": "Editează",
+    "anuleaza": "Anulează",
     "inapoi": "Înapoi la listă",
     "observations": "Observații",
     "alege-rezolutie": "Alege rezoluția",
@@ -45,7 +46,7 @@
     "status-1": "Aprobat de ANR",
     "status-2": "Aprobat de ANR și APMC",
     "status-3": "Respins",
-    "status-4": "Aprobat"
+    "status-4": "Anulat"
   },
   "bp": {
     "bp-lista": "Listă de buletine de pilotaj maritime"
