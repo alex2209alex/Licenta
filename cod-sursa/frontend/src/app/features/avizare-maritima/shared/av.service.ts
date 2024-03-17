@@ -17,10 +17,9 @@ export class AvService {
 
   search(search: AvSearch): Observable<AvListItem[]> {
     let queryParams = new HttpParams();
-    if (search.documentStatus) {
+    if (search.documentStatus !== null) {
       queryParams = queryParams.append("documentStatus", search.documentStatus);
     }
-
     return this.http.get<AvListItem[]>(this.url, {params:queryParams});
   }
 

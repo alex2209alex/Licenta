@@ -6,6 +6,10 @@ import { Router } from "@angular/router";
 import { AvDocumentStatus } from "../shared/av-document-status";
 import { UserHelper } from "../../../shared/guard/user-helper";
 import { MCStatus } from "../shared/mc-status";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { Generic } from "../../shared/generic.model";
+import { TranslateService } from "@ngx-translate/core";
+import { catchError, throwError } from "rxjs";
 
 @Component({
   selector: 'ge-av-home',
@@ -14,16 +18,40 @@ import { MCStatus } from "../shared/mc-status";
 })
 export class AvHomeComponent implements OnInit {
   items: AvListItem[] = [];
+  documentStatuses: Generic[] = [];
+  myForm: FormGroup;
+  isLoading: boolean = false;
 
-  constructor(private apiService: AvService, private router: Router, private userHelper: UserHelper) {
+  constructor(private apiService: AvService,
+              private router: Router,
+              private userHelper: UserHelper,
+              private fb: FormBuilder,
+              private translate: TranslateService) {
+    this.myForm = this.fb.group({
+      'documentStatus': [null]
+    });
   }
 
   ngOnInit(): void {
-    this.apiService.search({documentStatus: 0}).subscribe(
+    this.prefillDocumentStatusControl();
+    this.isLoading = true;
+    this.apiService.search({documentStatus: null}).pipe(
+      catchError((error) => {
+        this.isLoading = false;
+        return throwError(() => error);
+      })
+    ).subscribe(
       (resData: AvListItem[]) => {
         this.items = resData;
+        this.isLoading = false;
       }
     );
+  }
+
+  get controls() {
+    return {
+      documentStatus: this.myForm.get('documentStatus')!
+    }
   }
 
   public formatDateTime(dateTime: string | null): string | null {
@@ -62,5 +90,47 @@ export class AvHomeComponent implements OnInit {
 
   goToCancel(id: number) {
     this.router.navigate(['avizare-maritima', id, 'cancel']);
+  }
+
+  onClickSearch() {
+    this.isLoading = true;
+    this.apiService.search(
+      {
+        documentStatus: this.controls.documentStatus.value?.id ?? null
+      }
+    ).pipe(
+      catchError((error) => {
+        this.isLoading = false;
+        return throwError(() => error);
+      })
+    ).subscribe(
+      (resData: AvListItem[]) => {
+        this.items = resData;
+        this.isLoading = false;
+      }
+    );
+  }
+
+  private prefillDocumentStatusControl() {
+    this.documentStatuses.push({
+      id: 0,
+      label: this.translate.instant("avm.status-0")
+    });
+    this.documentStatuses.push({
+      id: 1,
+      label: this.translate.instant("avm.status-1")
+    });
+    this.documentStatuses.push({
+      id: 2,
+      label: this.translate.instant("avm.status-2")
+    });
+    this.documentStatuses.push({
+      id: 3,
+      label: this.translate.instant("avm.status-3")
+    });
+    this.documentStatuses.push({
+      id: 4,
+      label: this.translate.instant("avm.status-4")
+    });
   }
 }
