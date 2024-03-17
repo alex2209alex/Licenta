@@ -28,6 +28,10 @@ export class AvService {
     return this.http.post<void>(this.url, item);
   }
 
+  update(item: AvizareMaritima, id: number): Observable<void> {
+    return this.http.put<void>(this.url + '/' + id, item);
+  }
+
   findById(id: number): Observable<AvizareMaritima> {
     return this.http.get<AvizareMaritima>(this.url + "/" + id);
   }

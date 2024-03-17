@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ShipService } from '../../shared/ship.service';
 import { PortService } from '../../shared/port.service';
-import { catchError, forkJoin, throwError } from 'rxjs';
+import { catchError, forkJoin, Observable, throwError } from 'rxjs';
 import { Generic } from '../../shared/generic.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   NgbDate,
   NgbDateParserFormatter,
@@ -30,6 +30,9 @@ import { DeclaredCargo } from "../shared/declared-cargo.model";
   ]
 })
 export class AvEditComponent implements OnInit {
+  idMaritimeNotice: number | null = null;
+  isEditMode: boolean = false;
+  item: AvizareMaritima | null = null;
   myForm: FormGroup;
   isLoading: boolean = false;
   isSaving: boolean = false;
@@ -38,7 +41,7 @@ export class AvEditComponent implements OnInit {
   cargos: Generic[] = [];
   minDate: NgbDate;
 
-  private sources = [
+  private sources: (Observable<Generic[]> | Observable<AvizareMaritima>)[] = [
     this.shipService.getAll(),
     this.portService.getAll(),
     this.cargoService.getAll()
@@ -47,6 +50,7 @@ export class AvEditComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private shipService: ShipService,
+    private activatedRoute: ActivatedRoute,
     private portService: PortService,
     private cargoService: CargoService,
     private router: Router,
@@ -69,20 +73,44 @@ export class AvEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading = true;
-    forkJoin(this.sources)
-      .pipe(
-        catchError((error) => {
+    if (this.activatedRoute.snapshot.params['id']) {
+      this.idMaritimeNotice = Number(this.activatedRoute.snapshot.params['id']);
+      this.isEditMode = true;
+      this.sources.push(this.apiService.findById(this.idMaritimeNotice));
+    }
+    if (this.isEditMode) {
+      forkJoin(this.sources)
+        .pipe(
+          catchError((error) => {
+            this.isLoading = false;
+            this.goToList();
+            return throwError(() => error);
+          })
+        )
+        .subscribe(resData => {
+          this.ships = resData[0] as Generic[];
+          this.ports = resData[1] as Generic[];
+          this.cargos = resData[2] as Generic[];
+          this.item = resData[3] as AvizareMaritima;
+          this.prefillForm();
           this.isLoading = false;
-          this.goToList();
-          return throwError(() => error);
-        })
-      )
-      .subscribe(resData => {
-        this.ships = resData[0];
-        this.ports = resData[1];
-        this.cargos = resData[2];
-        this.isLoading = false;
-      });
+        });
+    } else {
+      forkJoin(this.sources)
+        .pipe(
+          catchError((error) => {
+            this.isLoading = false;
+            this.goToList();
+            return throwError(() => error);
+          })
+        )
+        .subscribe(resData => {
+          this.ships = resData[0] as Generic[];
+          this.ports = resData[1] as Generic[];
+          this.cargos = resData[2] as Generic[];
+          this.isLoading = false;
+        });
+    }
   }
 
   get controls() {
@@ -122,18 +150,33 @@ export class AvEditComponent implements OnInit {
       return;
     }
     this.isSaving = true;
-    this.apiService.add(this.buildFormData())
-      .pipe(
-        catchError(err => {
+    if (this.isEditMode) {
+      this.apiService.update(this.buildFormData(), this.idMaritimeNotice!)
+        .pipe(
+          catchError(err => {
+            this.isSaving = false;
+            return err;
+          })
+        )
+        .subscribe(() => {
           this.isSaving = false;
-          return err;
-        })
-      )
-      .subscribe(() => {
-        this.isSaving = false;
-        this.showInformation(this.translate.instant('app.titlu-informare'), this.translate.instant('app.mesaj-op-succes'))
-        this.goToList();
-      });
+          this.showInformation(this.translate.instant('app.titlu-informare'), this.translate.instant('app.mesaj-op-succes'))
+          this.goToList();
+        });
+    } else {
+      this.apiService.add(this.buildFormData())
+        .pipe(
+          catchError(err => {
+            this.isSaving = false;
+            return err;
+          })
+        )
+        .subscribe(() => {
+          this.isSaving = false;
+          this.showInformation(this.translate.instant('app.titlu-informare'), this.translate.instant('app.mesaj-op-succes'))
+          this.goToList();
+        });
+    }
   }
 
   private goToList() {
@@ -172,5 +215,43 @@ export class AvEditComponent implements OnInit {
       return dateTime.set('minute', time.minute).startOf('minute').toISOString();
     }
     return null;
+  }
+
+  private prefillForm(): void {
+    this.controls.port.setValue(this.item?.port);
+    this.controls.ship.setValue(this.item?.ship);
+    this.controls.estimatedArrivalDate.setValue(this.fromStringToNgbDateStruct(this.item?.estimatedArrivalDateTime!));
+    this.controls.estimatedArrivalTime.setValue(this.fromStringToNgbTimeStruct(this.item?.estimatedArrivalDateTime!));
+    if (this.item?.cargos) {
+      this.prefillCargo(this.item?.cargos);
+    }
+  }
+
+  private fromStringToNgbDateStruct(dateTime: string): NgbDateStruct {
+    const date = dayjs(dateTime);
+    return {
+      year: date.year(),
+      month: date.month() + 1,
+      day: date.date()
+    }
+  }
+
+  private fromStringToNgbTimeStruct(dateTime: string): NgbTimeStruct {
+    const date = dayjs(dateTime);
+    return {
+      hour: date.hour(),
+      minute: date.minute(),
+      second: 0
+    }
+  }
+
+  private prefillCargo(declaredCargos: DeclaredCargo[]) {
+    for (const dc of declaredCargos) {
+      const cargoForm = this.fb.group({
+        cargo: [dc.cargo, Validators.required],
+        quantity: [dc.quantity, [Validators.required, Validators.min(0)]]
+      });
+      this.controls.cargos.push(cargoForm);
+    }
   }
 }
