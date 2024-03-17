@@ -21,6 +21,22 @@ public class UserHelper {
         return Long.parseLong(jwt.getClaim(CLAIM_COD_FIRMA));
     }
 
+    public Boolean isAgent() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(RoleConstants.ROLE_AGENT_NAVA))) {
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+
+    public Boolean isPilotage() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(RoleConstants.ROLE_DISPECER_PILOTAJ))) {
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+
     public Boolean isAPMCAuthority() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(RoleConstants.ROLE_DISPECER_APMC))) {

@@ -34,7 +34,7 @@ create table ge.avizare_maritima
     constraint fk_am_escala foreign key (fk_agent) references ge.firma (id)
 );
 
-COMMENT ON COLUMN ge.avizare_maritima.stare_document IS '0 = Asteapta aprobari, 1 = Aprobat ANR, 2 = Aprobat ANR si APMC, 3 = Respins, 4 = Anulat';
+COMMENT ON COLUMN ge.avizare_maritima.stare_document IS '0 = Asteapta aprobari, 1 = Aprobat ANR, 2 = Aprobat ANR si APMC, 3 = Respins, 4 = Anulata';
 
 -- MARFA_DECLARATA
 CREATE SEQUENCE ge.marfa_declarata_seq START 100;
@@ -94,7 +94,7 @@ create table ge.buletin_pilotaj
     constraint fk_bp_escala foreign key (fk_escala) references ge.escala (id)
 );
 
-COMMENT ON COLUMN ge.buletin_pilotaj.stare_document IS '0 = Asteapta aprobari, 1 = Aprobat ANR, 2 = Aprobat ANR si APMC, 3 = Aprobat ANR, APMC si Operator marfa, 4 = Aprobat ANR, APMC, Operator marfa si Companie de pilotaj, 5 = Respins, 6 = Anulat';
+COMMENT ON COLUMN ge.buletin_pilotaj.stare_document IS '0 = Asteapta aprobari, 1 = Aprobat ANR, 2 = Aprobat ANR si APMC, 3 = Realizata de firma de pilotaj, 4 = Respins, 5 = Anulata';
 
 -- OPERARE_MARFA
 CREATE SEQUENCE ge.operare_marfa_seq START 100;

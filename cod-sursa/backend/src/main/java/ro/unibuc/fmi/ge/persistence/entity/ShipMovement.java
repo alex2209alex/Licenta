@@ -3,8 +3,10 @@ package ro.unibuc.fmi.ge.persistence.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import ro.unibuc.fmi.ge.dto.ShipMovementStatus;
+import ro.unibuc.fmi.ge.dto.ShipMovementType;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "manevra")
@@ -12,8 +14,6 @@ import java.time.LocalDateTime;
 @Setter
 public class ShipMovement {
     @Id
-    @SequenceGenerator(name = "manevra_seq", sequenceName = "manevra_seq")
-    @GeneratedValue(generator = "manevra_seq")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,17 +29,20 @@ public class ShipMovement {
     private Location endLocation;
 
     @Column(name = "data_ora_start")
-    private LocalDateTime beginingTime;
+    private Instant startMovementTime;
 
     @Column(name = "data_ora_final")
-    private LocalDateTime finishTime;
+    private Instant endMovementTime;
 
     @Column(name = "tip_manevra")
-    private Integer type;
+    private ShipMovementType type;
 
     @Column(name = "stare_manevra")
-    private Integer status;
+    private ShipMovementStatus status;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    private PilotageBulletin pilotageBulletin;
 
     @Override
     public int hashCode() {

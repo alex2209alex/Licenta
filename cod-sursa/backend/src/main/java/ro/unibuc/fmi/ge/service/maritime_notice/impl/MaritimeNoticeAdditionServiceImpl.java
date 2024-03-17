@@ -12,7 +12,6 @@ import ro.unibuc.fmi.ge.persistence.repository.*;
 import ro.unibuc.fmi.ge.service.maritime_notice.MaritimeNoticeAdditionService;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -67,7 +66,7 @@ public class MaritimeNoticeAdditionServiceImpl implements MaritimeNoticeAddition
         MaritimeNotice maritimeNotice = new MaritimeNotice();
         maritimeNotice.setMaritimeCall(maritimeCall);
         maritimeNotice.setAgent(agent);
-        maritimeNotice.setCreationTime(LocalDateTime.now());
+        maritimeNotice.setCreationTime(Instant.now());
         maritimeNotice.setDocumentStatus(MaritimeNoticeDocumentStatus.AWAITING);
         maritimeNotice.setEstimatedArrivalDateTime(dto.getEstimatedArrivalDateTime());
         return maritimeNoticeRepository.save(maritimeNotice);

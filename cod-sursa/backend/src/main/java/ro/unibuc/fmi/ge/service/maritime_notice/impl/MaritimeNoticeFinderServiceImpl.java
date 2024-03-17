@@ -27,6 +27,9 @@ public class MaritimeNoticeFinderServiceImpl implements MaritimeNoticeFinderServ
     public List<MaritimeNoticeListItemDto> search(MaritimeNoticeSearchDto searchDto) {
         if(Boolean.TRUE.equals(userHelper.isAuthority())) {
             searchDto.setIsAuthority(Boolean.TRUE);
+        } else  {
+            searchDto.setIsAuthority(Boolean.FALSE);
+            searchDto.setCompanyId(userHelper.getUserCompanyId());
         }
         return repository.search(searchDto);
     }

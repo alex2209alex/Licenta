@@ -15,7 +15,6 @@ import ro.unibuc.fmi.ge.service.maritime_notice.MaritimeNoticeModificationServic
 import ro.unibuc.fmi.ge.shared.UserHelper;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -83,7 +82,7 @@ public class MaritimeNoticeModificationServiceImpl implements MaritimeNoticeModi
 
     private void updateMaritimeNotice(MaritimeNoticeDto maritimeNoticeDto, MaritimeNotice maritimeNotice) {
         maritimeNotice.setDocumentStatus(MaritimeNoticeDocumentStatus.AWAITING);
-        maritimeNotice.setCreationTime(LocalDateTime.now());
+        maritimeNotice.setCreationTime(Instant.now());
         maritimeNotice.setRejectionReason(null);
         maritimeNotice.setEstimatedArrivalDateTime(maritimeNoticeDto.getEstimatedArrivalDateTime());
     }

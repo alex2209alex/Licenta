@@ -24,6 +24,7 @@ public class MaritimeNoticeController {
     private final MaritimeNoticeResolutionService resolutionService;
     private final MaritimeNoticeCancellationService cancellationService;
     private final UserHelper userHelper;
+
     public MaritimeNoticeController(
             MaritimeNoticeFinderService visualisationService,
             MaritimeNoticeAdditionService additionService,

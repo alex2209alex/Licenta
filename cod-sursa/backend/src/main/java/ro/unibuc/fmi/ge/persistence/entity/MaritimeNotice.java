@@ -6,7 +6,6 @@ import lombok.Setter;
 import ro.unibuc.fmi.ge.dto.MaritimeNoticeDocumentStatus;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,7 +31,7 @@ public class MaritimeNotice {
     private MaritimeCall maritimeCall;
 
     @Column(name = "data_creare")
-    private LocalDateTime creationTime;
+    private Instant creationTime;
 
     @Column(name = "stare_document")
     private MaritimeNoticeDocumentStatus documentStatus;

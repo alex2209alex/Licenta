@@ -3,8 +3,9 @@ package ro.unibuc.fmi.ge.persistence.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import ro.unibuc.fmi.ge.dto.PilotageBulletinDocumentStatus;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "buletin_pilotaj")
@@ -17,7 +18,7 @@ public class PilotageBulletin {
     private Long id;
 
     @Column(name = "data_ora_estimare_start")
-    private LocalDateTime estimatedStartTime;
+    private Instant estimatedStartTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="fk_operator_marfa")
@@ -36,10 +37,10 @@ public class PilotageBulletin {
     private MaritimeCall maritimeCall;
 
     @Column(name = "data_creare")
-    private LocalDateTime creationDate;
+    private Instant creationDate;
 
     @Column(name = "stare_document")
-    private Integer status;
+    private PilotageBulletinDocumentStatus documentStatus;
 
     @Column(name = "motiv_respingere")
     private String rejectionReason;
