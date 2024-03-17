@@ -50,6 +50,22 @@
     "status-4": "Anulat"
   },
   "bp": {
-    "bp-lista": "Listă de buletine de pilotaj maritime"
+    "bp-lista": "Listă de buletine de pilotaj maritime",
+    "adauga": "Adaugă buletin",
+    "est": "Dată estimată",
+    "agent": "Agent",
+    "pilotaj": "Pilotaj",
+    "nava": "Navă",
+    "loc-start": "De la",
+    "loc-stop": "Până la",
+    "start-timp": "Start",
+    "stop-timp": "Stop",
+    "status": "Status",
+    "status-0": "Așteaptă aprobări",
+    "status-1": "Aprobat de ANR",
+    "status-2": "Aprobat de ANR și APMC",
+    "status-3": "Realizat",
+    "status-4": "Respins",
+    "status-5": "Anulat"
   }
 }

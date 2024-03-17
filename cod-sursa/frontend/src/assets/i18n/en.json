@@ -50,6 +50,22 @@
     "status-4": "Cancelled"
   },
   "bp": {
-    "bp-lista": "List of maritime pilotage bulletins"
+    "bp-lista": "List of maritime pilotage bulletins",
+    "adauga": "Add bulletin",
+    "est": "Estimated time",
+    "agent": "Agent",
+    "pilotaj": "Pilotage",
+    "nava": "Ship",
+    "loc-start": "From",
+    "loc-stop": "To",
+    "start-timp": "Start",
+    "stop-timp": "Stop",
+    "status": "Status",
+    "status-0": "Awaiting approval",
+    "status-1": "Approved by ANR",
+    "status-2": "Approved by ANR and APMC",
+    "status-3": "Realised",
+    "status-4": "Rejected",
+    "status-5": "Cancelled"
   }
 }

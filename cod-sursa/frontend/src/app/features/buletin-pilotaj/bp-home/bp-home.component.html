@@ -3,3 +3,37 @@
         <h3>{{'bp.bp-lista' | translate}}</h3>
     </div>
 </div>
+<div class="row" *ngIf="showAddBtn()">
+  <div class="col-12 text-end">
+    <button type="button" class="btn btn-primary" routerLink="new">{{'bp.adauga' | translate}}</button>
+  </div>
+</div>
+<div class="row mb-1">
+  <div class="col-1">
+    <b>{{'bp.est' | translate}}</b>
+  </div>
+  <div class="col-1">
+    <b>{{'bp.agent' | translate}}</b>
+  </div>
+  <div class="col-1">
+    <b>{{'bp.pilotaj' | translate}}</b>
+  </div>
+  <div class="col-1">
+    <b>{{'bp.nava' | translate}}</b>
+  </div>
+  <div class="col-1">
+    <b>{{'bp.loc-start' | translate}}</b>
+  </div>
+  <div class="col-1">
+    <b>{{'bp.loc-stop' | translate}}</b>
+  </div>
+  <div class="col-1">
+    <b>{{'bp.start-timp' | translate}}</b>
+  </div>
+  <div class="col-1">
+    <b>{{'bp.stop-timp' | translate}}</b>
+  </div>
+  <div class="col-1">
+    <b>{{'bp.status' | translate}}</b>
+  </div>
+</div>

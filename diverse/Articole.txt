@@ -75,3 +75,7 @@ SELECT *
 FROM maritime_notice mn
 JOIN company c ON mn.fk_agent = c.id_company
 WHERE c.id_company = ?
+
+
+One to one
+https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
