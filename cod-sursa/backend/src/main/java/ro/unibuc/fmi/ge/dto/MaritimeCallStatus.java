@@ -7,7 +7,8 @@ public enum MaritimeCallStatus {
     PLANNED(0),
     COMPLETED(1),
     CANCELLED(2),
-    ARCHIVED(3);
+    ARCHIVED(3),
+    APPROVED(4);
 
     private static final Map<Integer, MaritimeCallStatus> BY_ID = new HashMap<>();
 

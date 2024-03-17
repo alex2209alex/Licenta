@@ -9,10 +9,7 @@ import ro.unibuc.fmi.ge.dto.maritime_notice.MaritimeNoticeDto;
 import ro.unibuc.fmi.ge.dto.maritime_notice.MaritimeNoticeListItemDto;
 import ro.unibuc.fmi.ge.dto.maritime_notice.MaritimeNoticeSearchDto;
 import ro.unibuc.fmi.ge.exceptions.NotFoundException;
-import ro.unibuc.fmi.ge.service.maritime_notice.MaritimeNoticeAdditionService;
-import ro.unibuc.fmi.ge.service.maritime_notice.MaritimeNoticeFinderService;
-import ro.unibuc.fmi.ge.service.maritime_notice.MaritimeNoticeModificationService;
-import ro.unibuc.fmi.ge.service.maritime_notice.MaritimeNoticeResolutionService;
+import ro.unibuc.fmi.ge.service.maritime_notice.*;
 import ro.unibuc.fmi.ge.shared.RoleConstants;
 import ro.unibuc.fmi.ge.shared.UserHelper;
 
@@ -24,18 +21,19 @@ public class MaritimeNoticeController {
     private final MaritimeNoticeFinderService visualisationService;
     private final MaritimeNoticeAdditionService additionService;
     private final MaritimeNoticeModificationService modificationService;
-    private final MaritimeNoticeResolutionService maritimeNoticeResolutionService;
+    private final MaritimeNoticeResolutionService resolutionService;
+    private final MaritimeNoticeCancellationService cancellationService;
     private final UserHelper userHelper;
-
     public MaritimeNoticeController(
             MaritimeNoticeFinderService visualisationService,
             MaritimeNoticeAdditionService additionService,
             MaritimeNoticeModificationService modificationService, MaritimeNoticeResolutionService maritimeNoticeResolutionService,
-            UserHelper userHelper) {
+            MaritimeNoticeCancellationService cancellationService, UserHelper userHelper) {
         this.visualisationService = visualisationService;
         this.additionService = additionService;
         this.modificationService = modificationService;
-        this.maritimeNoticeResolutionService = maritimeNoticeResolutionService;
+        this.resolutionService = maritimeNoticeResolutionService;
+        this.cancellationService = cancellationService;
         this.userHelper = userHelper;
     }
 
@@ -64,6 +62,12 @@ public class MaritimeNoticeController {
         modificationService.update(dto);
     }
 
+    @PutMapping("/{id}/cancel")
+    @PreAuthorize("hasAnyRole('" + RoleConstants.ROLE_AGENT_NAVA + "')")
+    public void cancel(@PathVariable Long id) {
+        cancellationService.cancel(id);
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole("
             + "'" + RoleConstants.ROLE_AGENT_NAVA + "'"
@@ -83,6 +87,6 @@ public class MaritimeNoticeController {
             + ",'" + RoleConstants.ROLE_DISPECER_APMC + "'"
             + ")")
     public void resolveMaritimeNotice(@PathVariable Long id, @RequestBody @Valid ResolutionDto dto) {
-        maritimeNoticeResolutionService.resolveMaritimeNotice(dto, id);
+        resolutionService.resolveMaritimeNotice(dto, id);
     }
 }

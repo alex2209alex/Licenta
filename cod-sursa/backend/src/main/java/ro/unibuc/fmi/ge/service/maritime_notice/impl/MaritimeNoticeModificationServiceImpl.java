@@ -6,6 +6,7 @@ import ro.unibuc.fmi.ge.dto.MaritimeCallStatus;
 import ro.unibuc.fmi.ge.dto.MaritimeNoticeDocumentStatus;
 import ro.unibuc.fmi.ge.dto.maritime_notice.DeclaredCargoDto;
 import ro.unibuc.fmi.ge.dto.maritime_notice.MaritimeNoticeDto;
+import ro.unibuc.fmi.ge.exceptions.BadRequestException;
 import ro.unibuc.fmi.ge.exceptions.ForbiddenException;
 import ro.unibuc.fmi.ge.exceptions.NotFoundException;
 import ro.unibuc.fmi.ge.persistence.entity.*;
@@ -13,6 +14,7 @@ import ro.unibuc.fmi.ge.persistence.repository.*;
 import ro.unibuc.fmi.ge.service.maritime_notice.MaritimeNoticeModificationService;
 import ro.unibuc.fmi.ge.shared.UserHelper;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -43,19 +45,22 @@ public class MaritimeNoticeModificationServiceImpl implements MaritimeNoticeModi
     public void update(MaritimeNoticeDto maritimeNoticeDto) {
         Long id = maritimeNoticeDto.getId();
         MaritimeNotice maritimeNotice = maritimeNoticeRepository.findById(id).orElseThrow(NotFoundException::new);
-        validateMaritimeNoticeOnUpdate(maritimeNotice);
+        validateMaritimeNoticeOnUpdate(maritimeNoticeDto, maritimeNotice);
         updateMaritimeNotice(maritimeNoticeDto, maritimeNotice);
         updateMaritimeCall(maritimeNoticeDto, maritimeNotice);
         updateDeclaredCargo(maritimeNoticeDto, maritimeNotice);
     }
 
-    private void validateMaritimeNoticeOnUpdate(MaritimeNotice maritimeNotice) {
+    private void validateMaritimeNoticeOnUpdate(MaritimeNoticeDto maritimeNoticeDto, MaritimeNotice maritimeNotice) {
         Long userCompanyId = userHelper.getUserCompanyId();
         if (!maritimeNotice.getAgent().getId().equals(userCompanyId)) {
             throw new ForbiddenException();
         }
         if (!MaritimeNoticeDocumentStatus.REJECTED.equals(maritimeNotice.getDocumentStatus())) {
             throw new ForbiddenException();
+        }
+        if (maritimeNoticeDto.getEstimatedArrivalDateTime().isBefore(Instant.now())) {
+            throw new BadRequestException();
         }
     }
 

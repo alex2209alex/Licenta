@@ -6,6 +6,7 @@ import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import org.springframework.stereotype.Repository;
 import ro.unibuc.fmi.ge.dto.GenericDto;
+import ro.unibuc.fmi.ge.dto.MaritimeCallStatus;
 import ro.unibuc.fmi.ge.dto.MaritimeNoticeDocumentStatus;
 import ro.unibuc.fmi.ge.dto.ShipDto;
 import ro.unibuc.fmi.ge.dto.maritime_notice.DeclaredCargoDto;
@@ -52,7 +53,8 @@ public class MaritimeNoticeQueryJpaRepository implements MaritimeNoticeQueryRepo
                 maritimeNotice.get(MaritimeNotice_.id).alias(MaritimeNotice_.ID),
                 portJoin.get(Port_.name).alias(PORT_NAME),
                 shipJoin.get(Ship_.name).alias(SHIP_NAME),
-                companyJoin.get(Company_.name).alias(COMPANY_NAME)
+                companyJoin.get(Company_.name).alias(COMPANY_NAME),
+                maritimeCallJoin.get(MaritimeCall_.status).alias(MaritimeCall_.STATUS)
         );
         cq.orderBy(
                 cb.desc(maritimeNotice.get(MaritimeNotice_.estimatedArrivalDateTime))
@@ -68,6 +70,7 @@ public class MaritimeNoticeQueryJpaRepository implements MaritimeNoticeQueryRepo
                         .portName(tuple.get(PORT_NAME, String.class))
                         .documentStatus(tuple.get(MaritimeNotice_.DOCUMENT_STATUS, MaritimeNoticeDocumentStatus.class).id)
                         .id(tuple.get(MaritimeNotice_.ID, Long.class))
+                        .maritimeCallStatus(tuple.get(MaritimeCall_.STATUS, MaritimeCallStatus.class).id)
                         .build())
                 .toList();
     }

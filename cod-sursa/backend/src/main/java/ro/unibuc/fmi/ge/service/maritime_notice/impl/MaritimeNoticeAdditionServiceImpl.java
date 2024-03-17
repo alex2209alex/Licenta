@@ -6,10 +6,12 @@ import ro.unibuc.fmi.ge.dto.MaritimeCallStatus;
 import ro.unibuc.fmi.ge.dto.MaritimeNoticeDocumentStatus;
 import ro.unibuc.fmi.ge.dto.maritime_notice.DeclaredCargoDto;
 import ro.unibuc.fmi.ge.dto.maritime_notice.MaritimeNoticeDto;
+import ro.unibuc.fmi.ge.exceptions.BadRequestException;
 import ro.unibuc.fmi.ge.persistence.entity.*;
 import ro.unibuc.fmi.ge.persistence.repository.*;
 import ro.unibuc.fmi.ge.service.maritime_notice.MaritimeNoticeAdditionService;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,9 +38,16 @@ public class MaritimeNoticeAdditionServiceImpl implements MaritimeNoticeAddition
 
     @Override
     public void add(MaritimeNoticeDto dto) {
+        validateMaritimeNoticeDate(dto.getEstimatedArrivalDateTime());
         MaritimeCall maritimeCall = createMaritimeCall(dto);
         MaritimeNotice maritimeNotice = createMaritimeNotice(dto, maritimeCall);
         addDeclaredCargos(dto.getCargos(), maritimeNotice);
+    }
+
+    private void validateMaritimeNoticeDate(Instant estimatedArrivalDateTime) {
+        if (estimatedArrivalDateTime.isBefore(Instant.now())) {
+            throw new BadRequestException();
+        }
     }
 
     private void addDeclaredCargos(List<DeclaredCargoDto> cargos, MaritimeNotice maritimeNotice) {

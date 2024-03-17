@@ -8,7 +8,7 @@ public enum MaritimeNoticeDocumentStatus {
     ANR_APPROVED(1),
     ANR_APMC_APPROVED(2),
     REJECTED(3),
-    CANCELED(4);
+    CANCELLED(4);
 
     private static final Map<Integer, MaritimeNoticeDocumentStatus> BY_ID = new HashMap<>();
 

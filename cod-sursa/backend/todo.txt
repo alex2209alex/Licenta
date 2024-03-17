@@ -1,2 +1,3 @@
-- de tratat erorile global
-- de validat serverside ca data sa fie de azi sau din vitor la av
+- diagrame de stare pentru avizare maritima, escala, buletin de pilotaj
+
+- forma de cautare dupa document status

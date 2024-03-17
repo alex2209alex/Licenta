@@ -16,4 +16,5 @@ public class MaritimeNoticeListItemDto {
     private String shipName;
     private String portName;
     private Integer documentStatus;
+    private Integer maritimeCallStatus;
 }
