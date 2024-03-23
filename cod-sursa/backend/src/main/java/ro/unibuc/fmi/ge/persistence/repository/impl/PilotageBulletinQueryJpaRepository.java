@@ -32,7 +32,7 @@ public class PilotageBulletinQueryJpaRepository implements PilotageBulletinQuery
         CriteriaQuery<Tuple> cq = cb.createTupleQuery();
         Root<ShipMovement> shipMovement = cq.from(ShipMovement.class);
         Join<ShipMovement, PilotageBulletin> pilotageBulletinJoin = shipMovement.join(ShipMovement_.pilotageBulletin);
-        Join<ShipMovement, MaritimeCall> maritimeCallJoin = shipMovement.join(ShipMovement_.maritimeCall);
+        Join<PilotageBulletin, MaritimeCall> maritimeCallJoin = pilotageBulletinJoin.join(PilotageBulletin_.maritimeCall);
         Join<MaritimeCall, Ship> shipJoin = maritimeCallJoin.join(MaritimeCall_.ship);
         Join<PilotageBulletin, Company> agentJoin = pilotageBulletinJoin.join(PilotageBulletin_.agent);
         Join<PilotageBulletin, Company> pilotageJoin = pilotageBulletinJoin.join(PilotageBulletin_.pilotageCompany);

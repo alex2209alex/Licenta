@@ -17,10 +17,6 @@ public class ShipMovement {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="fk_escala")
-    private MaritimeCall maritimeCall;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="fk_locatie_plecare")
     private Location startLocation;
 

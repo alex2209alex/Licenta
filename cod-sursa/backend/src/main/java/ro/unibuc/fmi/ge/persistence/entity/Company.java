@@ -3,6 +3,7 @@ package ro.unibuc.fmi.ge.persistence.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import ro.unibuc.fmi.ge.dto.CompanyType;
 
 @Entity
 @Table(name = "firma")
@@ -18,7 +19,7 @@ public class Company {
     private String name;
 
     @Column(name = "tip_firma")
-    private Integer type;
+    private CompanyType type;
 
     @Override
     public int hashCode() {
