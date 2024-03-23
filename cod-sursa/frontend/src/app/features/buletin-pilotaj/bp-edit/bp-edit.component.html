@@ -1,1 +1,39 @@
-<p>bp-edit works!</p>
+<div class="row">
+  <div class="col-12">
+    <h3>{{'bp.adauga' | translate}}</h3>
+  </div>
+</div>
+<div class="spinner-border" role="status" *ngIf="isLoading">
+  <span class="visually-hidden">Loading...</span>
+</div>
+<ng-container *ngIf="!isLoading">
+  <form [formGroup]="myForm">
+    <div class="row mb-1">
+      <div class="col-12 col-md-6 offset-md-3">
+        <label for="pilotageCompany" class="form-label">{{'bp.pilotaj' | translate}} *</label>
+        <ng-select id="pilotageCompany" [items]="pilotageCompanies" bindLabel="label" formControlName="pilotageCompany">
+        </ng-select>
+        <small class="text-danger" *ngIf="controls.pilotageCompany.hasError('required') && controls.pilotageCompany.touched">
+          {{'app.camp-obligatoriu' | translate}}
+        </small>
+      </div>
+    </div>
+    <div class="row mb-1">
+      <div class="col-12 col-md-6 offset-md-3">
+        <label for="cargoOperatingCompany" class="form-label">{{'bp.operator-cargo' | translate}}</label>
+        <ng-select id="cargoOperatingCompany" [items]="cargoOperatingCompanies" bindLabel="label" formControlName="cargoOperatingCompany">
+        </ng-select>
+      </div>
+    </div>
+    <div class="row mb-1">
+      <div class="col-12 col-md-6 offset-md-3">
+        <label for="maritimeCall" class="form-label">{{'bp.nava' | translate}} *</label>
+        <ng-select id="maritimeCall" [items]="maritimeCalls" bindLabel="label" formControlName="maritimeCall">
+        </ng-select>
+        <small class="text-danger" *ngIf="controls.maritimeCall.hasError('required') && controls.maritimeCall.touched">
+          {{'app.camp-obligatoriu' | translate}}
+        </small>
+      </div>
+    </div>
+  </form>
+</ng-container>
